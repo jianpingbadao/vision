@@ -9,3 +9,8 @@ when they cross a predefined limit. For the calculation of the object coordinate
 
 For running it, just download all files and run the main.py
 Thank you.
+
+
+## Demo
+A simple demo to show how the `VideoCapture()` works with the webcam:
+> `python video_capture_demo.py`
