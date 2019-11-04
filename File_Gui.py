@@ -34,13 +34,14 @@ class Root(Tk):
         self.labelFrame = ttk.LabelFrame(self, text = "Open A Video File")
         self.labelFrame.grid(row = 1, column = 0, padx = 10, pady = 20)
         self.button()
+        
         # self.printf()
 
     def button(self):
         # Create Button to open file directory
         
         self.button = ttk.Button(self.labelFrame, text = "File Browser", command = self.fileDialog)
-        self.button.grid(row = 1, column = 1)
+        self.button.grid(row = 2, column = 0)
 
 
     def fileDialog(self):
@@ -51,15 +52,15 @@ class Root(Tk):
 
         self.filename = filedialog.askopenfilename(initialdir = '/', title = "Select a File") # Read File
         self.label = ttk.Label(self)
-        self.label.grid(row = 2, column = 1)
+        self.label.grid(row = 3, column = 0)
         self.label.configure(text = self.filename) # Display filename
         cap = cv2.VideoCapture(self.filename) # Play video of file
         while True:
             # Video 
             _, self.frame = cap.read()
-            cv2.imshow('frame', self.frame)
-            frame = cv2.flip(self.frame, 1)
-            cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+            # cv2.imshow('frame', self.frame)
+            # self.frame = cv2.flip(self.frame, 1)
+            cv2image = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGBA)
             img = Image.fromarray(cv2image)
 
             copy_of_image = img.copy() 
@@ -75,6 +76,9 @@ class Root(Tk):
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+
+            input('q')
+            self.quit()
         cap.release()
         cv2.destroyAllWindows()
         # return self.filename
