@@ -2,7 +2,17 @@ from main import execute
 from tkinter import *
 from tkinter.ttk import *
 
+""" 
+    purpose: Creates GUI for Traffic analyzer. Passes arguments to main.py
 
+    arguments
+    ----------
+    file_name: type = String, optimal: must be a video type that cv2.VideoCaputure accepts
+    result_name: type = String, optimal: file should not exist, otherwise it overwrites the file
+    up_down: type = Integer, optimal: 0 = count cars going down, 1 = count cars going
+    up, 2 = count cars going both up and down
+    ----------
+"""
 window = Tk()
 
 window.title("Traffic Analyzer")
@@ -34,16 +44,28 @@ def clicked():
 
 
 def clicked1():
+""" 
+    purpose: sets up_down to 1, which means program will only calculate 
+    cars going up
+"""
     global up_down
     up_down = 1
 
     
 
 def clicked2():
+""" 
+    purpose: sets up_down to 2, which means program will calculate 
+    cars going up and down
+"""
     global up_down
     up_down = 2
 
 def clicked3():
+""" 
+    purpose: sets up_down to 0, which means program will only calculate 
+    cars going down
+"""    
     global up_down
     up_down = 0
 

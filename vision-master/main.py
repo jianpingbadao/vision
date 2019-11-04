@@ -4,22 +4,37 @@ import vehicles
 import time
 import os
 
-def execute(f, r, u):
-    file_name = f
-    result_name = r
-    up_down = u
+def execute(file_n, result_n, up_dwn):
+    """ 
+        purpose: execute(file_n, result_n, up_dwn) counts cars going up
+        and down based on parameters. When it is run it analyzes the video,
+        and produces a txt file in the end showing what times the cars 
+        passed the intersection. It also includes information about the total
+        cars going up and down.
+
+        parameters
+        ----------
+        file_n: type = String, optimal: must be a video type that cv2.VideoCaputure accepts
+        result_n: type = String, optimal: file should not exist, otherwise it overwrites the file
+        up_dwn: type = Integer, optimal: 0 = count cars going down, 1 = count cars going
+        up, 2 = count cars going both up and down
+        ----------
+
+        returns:
+        none
+    """
+    file_name = file_n
+    result_name = result_n
+    up_down = up_dwn
+
     #cnt_up is how many cars are going up relative to the highway
     #cnt_down is how many cars are going down relative to the highway
-    #file_name = f
-    #result_name = r
     cnt_up = 0
     cnt_down = 0
 
-    #cap is a variable set to capture whatever video file you set it to(can also be used to capture video from webcam)
     cap=cv2.VideoCapture(file_name)
-    #cap = cv2.VideoCapture("Freewa.mp4")
+ 
     #Get width and height of video
-
     w = cap.get(3)
     h = cap.get(4)
     frameArea = h*w
@@ -83,7 +98,7 @@ def execute(f, r, u):
     pid = 1
     speed_up = 0.0
     speed_down = 0.0
-    distance = .3
+    distance = .5
     t2 = 0
     t1 = 0
     contents = []
