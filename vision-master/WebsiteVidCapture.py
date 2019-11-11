@@ -54,15 +54,20 @@ video_name = 'video.avi'
 
 images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
 images.sort()
-frame = cv2.imread(os.path.join(image_folder, images[0]))
-height, width, layers = frame.shape
 
-video = cv2.VideoWriter(video_name, 0, 1, (width,height))
+# these four numbers may need to be adjusted for different camera
+left = 418
+top = 27
+right = 782
+down = 279
+width = right - left
+height = down - top
+video = cv2.VideoWriter(video_name, 0, 1, (width, height))
 
 for image in images:
 	im = Image.open(image)
-	#crop = im.crop((100,100,100,100))
-	#crop.save(image)
+	crop = im.crop((left, top, right, down))
+	crop.save(image)
 	
 	video.write(cv2.imread(os.path.join(image_folder, image)))
 
