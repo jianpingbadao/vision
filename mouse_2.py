@@ -1,6 +1,8 @@
 # This program isolates mouse click coordinates in relation to the GUI window/frame
 # The coordinates are displayed at the bottom.
 # The Submit button still needs to be fixed to save coordinates
+# Tracks using events
+
 from tkinter import *
 
 class MouseLocation( Frame ):
