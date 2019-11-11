@@ -113,8 +113,8 @@ class Root(Tk):
         self.lmain.imgtk = imgtk
         self.lmain.configure(image=imgtk)
 
-        self.newbut = ttk.Button(self.labelFrame, image = img, command = self.buttonClick)
-        self.newbut.grid(row = 0, column = 0)
+        # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.buttonClick)
+        # self.newbut.grid(row = 0, column = 0)
         # self.lmain.after(10, self.fileDialog) 
 
         # if cv2.waitKey(1) & 0xFF == ord('q'):
