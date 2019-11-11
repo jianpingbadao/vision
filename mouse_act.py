@@ -1,3 +1,6 @@
+# This is a sample control panel that converts the current mouse click
+# coordinates to the next videos coordinates
+# Uses a listener, that only activates once the main gui is closed.
 
 import cv2
 import numpy as np

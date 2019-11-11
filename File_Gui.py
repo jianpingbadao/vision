@@ -1,3 +1,8 @@
+# This is the main file that houses the Gui for the video display
+# It has a search button that opens up the file directory to select a video
+# Displays the video file name below
+# The Submit button tracks the mouse click, but only in the pixels of the button, needs to be fixed
+
 import cv2
 import numpy as np
 import vehicles
@@ -14,6 +19,8 @@ import os
 
 
 class Root(Tk):
+
+    
 
     def __init__(self):
         # Constructor, Makes version 
@@ -45,19 +52,29 @@ class Root(Tk):
         self.submitButton = Button(self, command=self.buttonClick, text="Submit")
         self.submitButton.grid(row = 4, column = 5)
         
+
+        global val 
+        val = False
         # self.click()
+        if(val == True):
+            val = False
+            print("second click")
+            # self.buttonClick()
+
+    
 
     def buttonClick(self):
         """ handle button click event and output text from entry area"""
+        global val
+        val = True
         print('hello')    # do here whatever you want
         global coord
         coord = "f {0}".format(self.mouse.position)
         self.pt_1.configure(text = coord)
         print(coord)
-        # self.click()
+        
     
-
-
+    
 
     global vid_x 
     vid_x = 500 # Vid Width

@@ -1,3 +1,6 @@
+# This program isolates mouse click coordinates in relation to the GUI window/frame
+# The coordinates are displayed at the bottom.
+# The Submit button still needs to be fixed to save coordinates
 from tkinter import *
 
 class MouseLocation( Frame ):
@@ -12,30 +15,38 @@ class MouseLocation( Frame ):
       self.positionLabel = Label( self,
          textvariable = self.mousePosition )
       self.positionLabel.pack( side = BOTTOM )
-      self.button_1 = Button(self, text = "Submit", command = self.save).pack()
+      self.button_1 = Button(self, text = "Submit", command = self.buttonPressed).pack()
       # bind mouse events to window
       self.bind( "<Button-1>", self.buttonPressed )
       
       #self.buttonfunc()
 
     
-   global x
-   global y
-
+   # global x 
+   # x = []
+   # global y 
+   # y = []
+   # global i
    def buttonPressed( self, event ):
       self.mousePosition.set( "Pressed at [ " + str( event.x ) + 
          ", " + str( event.y ) + " ]" )
         
-      global x
-      global y
-      x = str(event.x)
+      # global x
+      # x = [2]
+      # global y 
+      # y = [2]
+      # global i
+      # i = 1
+      # x[i] = str(event.x)
         
-      y = str(event.y)
+      # y[i] = str(event.y)
 
-   def save(self):
-       global x
-       global y
-       print("f," + x + ' , ' + y)
+   # def save(self):
+     #  global x 
+     #  x = [2]
+     #  global y 
+     #  y = [2]
+     #  print("f," + x[0] + ' , ' + y[0])
     #def buttonfunc(self)
     # Create Button to open file directory
         #self.button_1 = Button(self, text = "submit", command = self.buttonPressed).pack()
