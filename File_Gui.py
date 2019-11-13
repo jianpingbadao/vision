@@ -17,17 +17,20 @@ from pynput.mouse import Controller
 
 import os
 
+val = False
+coord = None
+vid_x = 500 # Width of video
+vid_y = 300 # Height of video
+
 
 class Root(Tk):
-
-    
 
     def __init__(self):
         # Constructor, Makes version 
         # Args: self = Root
         super(Root, self).__init__()
         self.title("Video File Opener Window")
-        self.minsize(600, 400) # Min size of window
+        self.minsize(600, 500) # Min size of window
 
         self.video_image_tk = None  # save the first frame of the video as an ImageTk obj
         self.video_file_loaded = False
@@ -39,26 +42,27 @@ class Root(Tk):
         self.imageCanvas.bind("<Button-1>", self.canvasClickCallBack)
         self.imageCanvas.grid(row=0, column=0)
 
-        self.create_entries_to_hold_lines()
-        #Capture video frames
-        self.lmain = ttk.Label(self.imageFrame)
-        self.lmain.grid(row=4, column=4)
+        self.labelFrame = ttk.LabelFrame(self, text="Open A Video File")
+        self.labelFrame.grid(row=1, column=0, padx=10, pady=20)
+        self.create_file_dialog_button()
 
-        self.labelFrame = ttk.LabelFrame(self, text = "Open A Video File")
-        self.labelFrame.grid(row = 1, column = 0, padx = 10, pady = 20)
-        self.button()
-        # self.printf()
+        # filename entry
+        self.filename_strvar = StringVar()
+        self.filename_entry = Entry(self, textvariable=self.filename_strvar, width=40)
+        self.filename_entry.grid(row=2, column=0)
+
+        self.create_entries_to_hold_lines()
+
         self.mouse = Controller()
         global coord
         coord = ''
-        self.pt_1 = ttk.Label(self, text = coord)
-        self.pt_1.grid(row = 4, column = 6)
+        self.pt_1 = ttk.Label(self, text=coord)
+        self.pt_1.grid(row=4, column=6)
 
         """Create Submit Button"""
         # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
-        self.submitButton = Button(self, command=self.buttonClick, text="Submit")
-        self.submitButton.grid(row = 4, column = 5)
-        
+        self.submitButton = Button(self, command=self.submitButtonClick, text="Submit")
+        self.submitButton.grid(row=4, column=5)
 
         global val 
         val = False
@@ -66,11 +70,8 @@ class Root(Tk):
         if(val == True):
             val = False
             print("second click")
-            # self.buttonClick()
+            # self.submitButtonClick()
 
-    
-
-    def buttonClick(self):
 
     def create_entries_to_hold_lines(self):
         """
@@ -126,22 +127,16 @@ class Root(Tk):
                 self.cur_group %= self.num_of_groups
 
 
+    def submitButtonClick(self):
         """ handle button click event and output text from entry area"""
         global val
         val = True
         print('hello')    # do here whatever you want
         global coord
         coord = "f {0}".format(self.mouse.position)
-        self.pt_1.configure(text = coord)
+        self.pt_1.configure(text=coord)
         print(coord)
-        
-    
-    
 
-    global vid_x 
-    vid_x = 500 # Vid Width
-    global vid_y 
-    vid_y = 300 # Vid Height
 
     # def click(self):
       #  global vid_x
@@ -153,13 +148,12 @@ class Root(Tk):
        # self.vid_button.grid(row = 0, column = 0)
        # print("x: {0}".format(self.mouse.position))
 
-    def button(self):
-        # Create Button to open file directory
-        self.button = ttk.Button(self.labelFrame, text = "File Browser", command = self.fileDialog)
-        self.button.grid(row = 1, column = 1)
 
-    
-    
+    def create_file_dialog_button(self):
+        # Create Button to open file directory
+        self.button = ttk.Button(self.labelFrame, text="File Browser", command=self.fileDialog)
+        self.button.grid(row=1, column=1)
+
 
     def check_video_file(self, filename):
         """
@@ -183,17 +177,14 @@ class Root(Tk):
             if filename.endswith(extension):
                 return True
         return False
-    
-    
 
 
     def fileDialog(self):
         #Reads file to video and displays video in Gui
         global vid_x
-        vid_x = 500 # Vid Width
         global vid_y
-        vid_y = 300 # Vid Height
-        self.filename = filedialog.askopenfilename(initialdir = os.getcwd(), title = "Select a File") # Read File
+
+        self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File") # Read File
 
         if not self.check_video_file(self.filename):
             return
@@ -210,7 +201,7 @@ class Root(Tk):
         img = Image.fromarray(cv2image)
 
         copy_of_image = img.copy() 
-        img = copy_of_image.resize((vid_x,vid_y)) # size of video
+        img = copy_of_image.resize((vid_x, vid_y)) # size of video
         imgtk = ImageTk.PhotoImage(image=img)
 
         self.video_image_tk = imgtk # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
@@ -218,7 +209,7 @@ class Root(Tk):
 
         self.video_file_loaded = True
 
-        # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.buttonClick)
+        # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.submitButtonClick)
         # self.newbut.grid(row = 0, column = 0)
         # self.lmain.after(10, self.fileDialog) 
 
@@ -230,6 +221,7 @@ class Root(Tk):
     
     #def printf(self):
      #   print(self.fileDialog())
+
 
 if __name__ == '__main__':
     root = Root()
