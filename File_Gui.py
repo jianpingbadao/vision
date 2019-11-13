@@ -33,6 +33,7 @@ class Root(Tk):
         self.imageFrame = ttk.Frame(self, width=600, height=500)
         self.imageFrame.grid(row=0, column=0, padx=10, pady=2)
 
+        self.create_entries_to_hold_lines()
         #Capture video frames
         self.lmain = ttk.Label(self.imageFrame)
         self.lmain.grid(row=4, column=4)
@@ -64,6 +65,32 @@ class Root(Tk):
     
 
     def buttonClick(self):
+
+    def create_entries_to_hold_lines(self):
+        """
+        Create entries to hold information about the lines that we will click/enter later.
+        """
+        self.num_of_groups = 2
+        self.num_of_lines_per_group = 3
+        self.num_of_clicks_per_line = 2
+        self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in range(self.num_of_groups)]
+
+        self.line_entries = []
+        start_row = 3
+        start_col = 0
+        for group in range(self.num_of_groups):
+            line_entries_cur_group = []
+            for row in range(self.num_of_lines_per_group):
+                line_entry = Entry(self, textvariable=self.entry_strvars[group][row])
+                cur_row = start_row + row + group * self.num_of_lines_per_group
+                line_entry.grid(row=cur_row, column=start_col)
+                line_entries_cur_group.append(line_entry)
+            self.line_entries.append(line_entries_cur_group)
+
+        self.cur_group = 0
+        self.cur_line = 0
+        self.cur_click = 0
+
         """ handle button click event and output text from entry area"""
         global val
         val = True
