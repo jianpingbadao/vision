@@ -97,6 +97,35 @@ class Root(Tk):
         self.cur_line = 0
         self.cur_click = 0
 
+
+    def canvasClickCallBack(self, event):
+        """The call back function when the mouse clicks on the image canvas.
+        It will fill out the entries one by one.
+
+        Parameters
+        ----------
+        event : obj
+            The click event.
+        """
+        print(f"{event.x}, {event.y}")
+        # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
+        if self.cur_click == 0:
+            self.entry_strvars[self.cur_group][self.cur_line].set(f"{event.x}, {event.y}")
+        else:
+            _content = self.entry_strvars[self.cur_group][self.cur_line].get()
+            _content += f", {event.x}, {event.y}"
+            self.entry_strvars[self.cur_group][self.cur_line].set(_content)
+
+        self.cur_click += 1
+        if self.cur_click == self.num_of_clicks_per_line:
+            self.cur_click = 0
+            self.cur_line += 1  # move to the next line
+            if self.cur_line == self.num_of_lines_per_group:
+                self.cur_line = 0
+                self.cur_group += 1
+                self.cur_group %= self.num_of_groups
+
+
         """ handle button click event and output text from entry area"""
         global val
         val = True
