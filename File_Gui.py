@@ -29,9 +29,15 @@ class Root(Tk):
         self.title("Video File Opener Window")
         self.minsize(600, 400) # Min size of window
 
+        self.video_image_tk = None  # save the first frame of the video as an ImageTk obj
+        self.video_file_loaded = False
+
         #Graphics window
-        self.imageFrame = ttk.Frame(self, width=600, height=500)
-        self.imageFrame.grid(row=0, column=0, padx=10, pady=2)
+        global vid_x
+        global vid_y
+        self.imageCanvas = Canvas(self, width=vid_x, height=vid_y, bg='grey')
+        self.imageCanvas.bind("<Button-1>", self.canvasClickCallBack)
+        self.imageCanvas.grid(row=0, column=0)
 
         self.create_entries_to_hold_lines()
         #Capture video frames
@@ -126,6 +132,28 @@ class Root(Tk):
     
     
 
+    def check_video_file(self, filename):
+        """
+        Check whether the given video filename is valid or not.
+
+        Parameters
+        ----------
+        filename : str
+            The filename (absolute path) of the video file.
+
+        Returns
+        -------
+        bool
+            True if the filename is one of the supported video format. False, otherwise.
+        """
+        if not filename:
+            return False
+
+        supported_video_format = ['mp4', 'avi', 'm4v']
+        for extension in supported_video_format:
+            if filename.endswith(extension):
+                return True
+        return False
     
     
 
@@ -137,9 +165,11 @@ class Root(Tk):
         global vid_y
         vid_y = 300 # Vid Height
         self.filename = filedialog.askopenfilename(initialdir = os.getcwd(), title = "Select a File") # Read File
-        self.label = ttk.Label(self)
-        self.label.grid(row = 2, column = 0)
-        self.label.configure(text = self.filename) # Display filename
+
+        if not self.check_video_file(self.filename):
+            return
+
+        self.filename_strvar.set(self.filename) # Display filename
         cap = cv2.VideoCapture(self.filename) # Play video of file
 
         # while True:
@@ -154,8 +184,10 @@ class Root(Tk):
         img = copy_of_image.resize((vid_x,vid_y)) # size of video
         imgtk = ImageTk.PhotoImage(image=img)
 
-        self.lmain.imgtk = imgtk
-        self.lmain.configure(image=imgtk)
+        self.video_image_tk = imgtk # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
+        self.imageCanvas.create_image(0, 0, anchor=NW, image=imgtk)
+
+        self.video_file_loaded = True
 
         # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.buttonClick)
         # self.newbut.grid(row = 0, column = 0)
