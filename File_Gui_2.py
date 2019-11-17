@@ -69,6 +69,9 @@ class Root(Tk):
         self.submitButton = Button(self, command=self.submitButtonClick, text="Submit")
         self.submitButton.grid(row=4, column=5)
 
+        self.next_entry()
+        global next_clicked 
+        next_clicked = False
         global val 
         val = False
         # self.click()
@@ -76,6 +79,13 @@ class Root(Tk):
             val = False
             print("second click")
             # self.submitButtonClick()
+
+
+    def next_entry(self):
+        print("next") # debug
+        global next_clicked
+        next_clicked = True
+        print(next_clicked) # debug
 
 
     def create_entries_to_hold_lines(self, num_lanes):
@@ -86,6 +96,9 @@ class Root(Tk):
         self.num_of_lines_per_group = 3
         self.num_of_clicks_per_line = 2
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in range(self.num_of_groups)]
+
+        self.button_next = Button(self, text = "next", command = self.next_entry)
+        self.button_next.grid(row = 3, column = 1)
 
         self.line_entries = []
         start_row = 3
@@ -112,24 +125,39 @@ class Root(Tk):
         event : obj
             The click event.
         """
+        global next_clicked
+        print(next_clicked)
+
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
+        if next_clicked == True:
+            self.cur_line += 1  # move to the next line
+            self.cur_click = 0
+            next_clicked = False
+            if self.cur_line == self.num_of_lines_per_group:
+                self.cur_line = 0
+                self.cur_group += 1
+                self.cur_group %= self.num_of_groups
+
+                
         if self.cur_click == 0:
             self.entry_strvars[self.cur_group][self.cur_line].set(f"{event.x}, {event.y}")
         else:
             _content = self.entry_strvars[self.cur_group][self.cur_line].get()
             _content += f", {event.x}, {event.y}"
             self.entry_strvars[self.cur_group][self.cur_line].set(_content)
-
+        # if next_clicked == True: # check if button clicked to move to next line
         self.cur_click += 1
+            # next_clicked = False
         if self.cur_click == self.num_of_clicks_per_line:
             self.cur_click = 0
-            self.cur_line += 1  # move to the next line
+            
             if self.cur_line == self.num_of_lines_per_group:
                 self.cur_line = 0
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
 
+        
 
     def submitButtonClick(self):
         """ handle button click event and output text from entry area"""
