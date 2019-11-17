@@ -93,6 +93,7 @@ class Root(Tk):
         Create entries to hold information about the lines that we will click/enter later.
         """
         self.num_of_groups = num_lanes
+        self.prev_lanes = 0
         self.num_of_lines_per_group = 3
         self.num_of_clicks_per_line = 2
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in range(self.num_of_groups)]
@@ -112,9 +113,16 @@ class Root(Tk):
                 line_entries_cur_group.append(line_entry)
             self.line_entries.append(line_entries_cur_group)
 
+        if self.prev_lanes > self.num_of_groups: # check to see if the new amount of lanes is less than the previous
+            # for ln in range(self.prev_lanes - self.num_of_groups):
+            for line_entry in self.grid_slaves():
+                if int(line_entry.grid_info()["row"]) > self.num_of_groups:
+                    line_entry.grid_forget()
+                # line_entry.grid_forget(row = self.num_of_groups + ln, column = start_col)
         self.cur_group = 0
         self.cur_line = 0
         self.cur_click = 0
+        self.prev_lanes = num_lanes
         
 
     def canvasClickCallBack(self, event):
@@ -139,19 +147,31 @@ class Root(Tk):
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
 
-                
+
         if self.cur_click == 0:
             self.entry_strvars[self.cur_group][self.cur_line].set(f"{event.x}, {event.y}")
         else:
             _content = self.entry_strvars[self.cur_group][self.cur_line].get()
             _content += f", {event.x}, {event.y}"
             self.entry_strvars[self.cur_group][self.cur_line].set(_content)
-        # if next_clicked == True: # check if button clicked to move to next line
+        
         self.cur_click += 1
-            # next_clicked = False
+            
         if self.cur_click == self.num_of_clicks_per_line:
             self.cur_click = 0
-            
+            # self.imageCanvas.create_line(_content)
+            print(self.entry_strvars[self.cur_group][self.cur_line].get().split(', '))
+            # print(self.entry_strvars[self.cur_group][self.cur_line].get()[15:18])
+            x_1 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0])
+            y_1 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1])
+            x_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2])
+            y_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3])
+            print(x_1)
+            print(y_1)
+            print(x_2)
+            print(y_2)
+            self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+            # self.imageCanvas.create_line(0,0,40,40)
             if self.cur_line == self.num_of_lines_per_group:
                 self.cur_line = 0
                 self.cur_group += 1
@@ -164,6 +184,8 @@ class Root(Tk):
         input = self.entry_lane.get()
         print(input)
         self.create_entries_to_hold_lines(int(input))
+        self.cur_line = 0
+        
 
 
     # def click(self):
@@ -233,7 +255,7 @@ class Root(Tk):
         self.video_image_tk = imgtk # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
         self.imageCanvas.create_image(0, 0, anchor=NW, image=imgtk)
         ##### Draw lines
-        
+        # self.imageCanvas.create_line()
 
 
         self.video_file_loaded = True
