@@ -71,7 +71,7 @@ class Root(Tk):
 
         self.next_entry()
         global next_clicked 
-        next_clicked = False
+        next_clicked = True
         global val 
         val = False
         # self.click()
@@ -138,15 +138,7 @@ class Root(Tk):
 
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
-        if next_clicked == True:
-            self.cur_line += 1  # move to the next line
-            self.cur_click = 0
-            next_clicked = False
-            if self.cur_line == self.num_of_lines_per_group:
-                self.cur_line = 0
-                self.cur_group += 1
-                self.cur_group %= self.num_of_groups
-
+        
 
         if self.cur_click == 0:
             self.entry_strvars[self.cur_group][self.cur_line].set(f"{event.x}, {event.y}")
@@ -170,8 +162,20 @@ class Root(Tk):
             print(y_1)
             print(x_2)
             print(y_2)
-            self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+             
+            
+            # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
             # self.imageCanvas.create_line(0,0,40,40)
+            if self.cur_line == self.num_of_lines_per_group:
+                self.cur_line = 0
+                self.cur_group += 1
+                self.cur_group %= self.num_of_groups
+
+        if next_clicked == True:
+            self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+            self.cur_line += 1  # move to the next line
+            self.cur_click = 0
+            next_clicked = False
             if self.cur_line == self.num_of_lines_per_group:
                 self.cur_line = 0
                 self.cur_group += 1
