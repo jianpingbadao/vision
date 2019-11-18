@@ -8,7 +8,7 @@ import os
 
 driver = webdriver.Chrome(executable_path='/Users/paulyp123/Desktop/chromedriver')
 
-driver.get('https://nyctmc.org/google_popup.php?cid=975')
+driver.get('https://nyctmc.org/google_popup.php?cid=1148')
 #driver.get('https://www.youtube.com/')
 image_folder = '/Users/paulyp123/Desktop/vision-master/' + str(time.time())
 os.mkdir(image_folder)
