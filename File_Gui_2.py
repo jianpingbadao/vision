@@ -40,23 +40,23 @@ class Root(Tk):
         global vid_y
         self.imageCanvas = Canvas(self, width=vid_x, height=vid_y, bg='grey')
         self.imageCanvas.bind("<Button-1>", self.canvasClickCallBack)
-        self.imageCanvas.grid(row=0, column=0)
+        self.imageCanvas.grid(row=0, column=0 , rowspan=10 ,columnspan=1)
 
         self.labelFrame = ttk.LabelFrame(self, text="Open A Video File")
-        self.labelFrame.grid(row=1, column=0, padx=10, pady=20)
+        self.labelFrame.grid(row=11, column=0, padx=10, pady=20)
         self.create_file_dialog_button()
 
         # filename entry
         self.filename_strvar = StringVar()
         self.filename_entry = Entry(self, textvariable=self.filename_strvar, width=40)
-        self.filename_entry.grid(row=2, column=0)
+        self.filename_entry.grid(row=13, column=0)
         
         # Assigns num of lanes for data point entries
         num_lanes = 1    # Default 1 lane, for some reason can only increase lanes, can't decrease
         self.create_entries_to_hold_lines(num_lanes)
-        self.label_lane = Label(self, text = "Enter # of lanes").grid(row = 3, column = 4)
+        self.label_lane = Label(self, text = "Enter # of lanes").grid(row = 0, column = 1)
         self.entry_lane = Entry(self, textvariable = self.num_of_groups)
-        self.entry_lane.grid(row = 4, column = 4)
+        self.entry_lane.grid(row = 1, column = 1)
 
         self.mouse = Controller()
         global coord
@@ -67,7 +67,7 @@ class Root(Tk):
         """Create Submit Button"""
         # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
         self.submitButton = Button(self, command=self.submitButtonClick, text="Submit")
-        self.submitButton.grid(row=4, column=5)
+        self.submitButton.grid(row=1, column=2)
 
         self.next_entry()
         global next_clicked 
@@ -99,11 +99,11 @@ class Root(Tk):
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in range(self.num_of_groups)]
 
         self.button_next = Button(self, text = "next", command = self.next_entry)
-        self.button_next.grid(row = 3, column = 1)
+        self.button_next.grid(row = 3, column = 2)
 
         self.line_entries = []
         start_row = 3
-        start_col = 0
+        start_col = 1
         for group in range(self.num_of_groups):
             line_entries_cur_group = []
             for row in range(self.num_of_lines_per_group):
@@ -206,7 +206,7 @@ class Root(Tk):
     def create_file_dialog_button(self):
         # Create Button to open file directory
         self.button = ttk.Button(self.labelFrame, text="File Browser", command=self.fileDialog)
-        self.button.grid(row=1, column=1)
+        self.button.grid(row=12, column=0)
 
 
     def check_video_file(self, filename):
