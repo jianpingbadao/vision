@@ -21,7 +21,8 @@ val = False
 coord = None
 vid_x = 500 # Width of video
 vid_y = 300 # Height of video
-
+i = 0
+j = 0
 
 class Root(Tk):
 
@@ -69,7 +70,7 @@ class Root(Tk):
         self.submitButton = Button(self, command=self.submitButtonClick, text="Submit", state = DISABLED)
         self.submitButton.grid(row=1, column=2)
 
-        self.next_entry()
+        # self.next_entry(index)
         global next_clicked 
         next_clicked = True
         global val 
@@ -80,14 +81,32 @@ class Root(Tk):
             print("second click")
             # self.submitButtonClick()
 
+        # self.next_entries = []
 
     def next_entry(self):
-        print("next") # debug
-        global next_clicked
-        next_clicked = True
-        print(next_clicked) # debug
+       global i
+       global j
+       print("next") # debug
+       global next_clicked
+       next_clicked = True
+       print(next_clicked) # debug
+       self.next_entries[i][j].config(state = DISABLED)
+       if(i*j <= self.num_of_groups*self.num_of_lines_per_group):
+            # self.next_entries[i][j].config(state = NORMAL)
+            j += 1
+            if j == self.num_of_lines_per_group:
+                i +=1
+                j = 0
+            self.next_entries[i][j].config(state = NORMAL)
+    ######
+    # def next_entry(self):
+      #  for btn in self.next_entries_cur_group:
+       #     if str(btn['state']) == 'disabled':
+           #  btn.configure(state = 'normal')
+        # self.next_entries_cur_group[index].configure(state = 'disabled')
 
-
+    ######
+    
     def create_entries_to_hold_lines(self, num_lanes):
         """
         Create entries to hold information about the lines that we will click/enter later.
@@ -97,26 +116,39 @@ class Root(Tk):
         self.num_of_lines_per_group = 3
         self.num_of_clicks_per_line = 2
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in range(self.num_of_groups)]
-
+        
         # self.button_next = Button(self, text = "next", command = self.next_entry)
         # self.button_next.grid(row = 3, column = 2)
 
-        self.line_entries = []
+        self.line_entries = [] # list of list of text widgets
+        self.next_entries = [] # list of list of buttons
+        
         start_row = 3
         start_col = 1
+        next_button_index = 0 # keeps track of next button
         for group in range(self.num_of_groups):
             line_entries_cur_group = []
-            # next_entries_cur_group = []
+            next_entries_cur_group = []
             for row in range(self.num_of_lines_per_group):
                 line_entry = Entry(self, textvariable=self.entry_strvars[group][row])
-                button_next = Button(self, text = "next", state = DISABLED, command = self.next_entry) # next button
-                # self.button_next.grid(row = 3, column = 2)
+                # button_next = Button(self, text = "next", state = DISABLED, command = lambda: self.next_entry(next_button_index)) # next button
+                
+                # Create next button
+                # next_entries_cur_group.append(Button(self, text=("next"+ str(next_button_index)), state = DISABLED, command=lambda c=row: print(next_entries_cur_group[c].cget("text"))))
+                next_button_index += 1
+                next_entries_cur_group.append(Button(self, text=("next"+ str(next_button_index)), state = DISABLED, command = self.next_entry))
                 cur_row = start_row + row + group * self.num_of_lines_per_group
                 line_entry.grid(row=cur_row, column=start_col)
-                button_next.grid(row = cur_row, column = start_col +1)
+                # button_next.grid(row = cur_row, column = start_col +1)
+                next_entries_cur_group[row].grid(row = cur_row, column = start_col +1)
                 line_entries_cur_group.append(line_entry)
                 # next_entries_cur_group.append(button_next)
+                
+            # next_entries_cur_group[1].config(state = DISABLED) # disables button 2 in each group.
+            self.next_entries.append(next_entries_cur_group)
             self.line_entries.append(line_entries_cur_group)
+        
+        # self.next_entries[0][1].config(state = NORMAL) # enable disable buttons
 
         if self.prev_lanes > self.num_of_groups: # check to see if the new amount of lanes is less than the previous
             # for ln in range(self.prev_lanes - self.num_of_groups):
@@ -192,14 +224,25 @@ class Root(Tk):
                 self.cur_group %= self.num_of_groups
 
         
-
+    # i = 0
+    # j = 0
     def submitButtonClick(self):
+        # global i
+        # global j
         """ handle button click event and output text from entry area"""
         input = self.entry_lane.get()
         print(input)
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
         self.submitButton.config(state = DISABLED)
+        self.next_entries[0][0].config(state = NORMAL)
+        # j += 1
+        # if(i <= self.num_of_groups*self.num_of_lines_per_group):
+           # self.next_entries[i][j].config(state = NORMAL)
+           # j += 1
+           # if j == self.num_of_lines_per_group:
+               # i +=1
+               # j = 0
         # self.button_next.config(state = NORMAL)
         # self.submitButton.config(state = DISABLED)
 
