@@ -72,7 +72,7 @@ class Root(Tk):
 
         # self.next_entry(index)
         global next_clicked 
-        next_clicked = True
+        next_clicked = False
         global val 
         val = False
         # self.click()
@@ -91,13 +91,20 @@ class Root(Tk):
        next_clicked = True
        print(next_clicked) # debug
        self.next_entries[i][j].config(state = DISABLED)
-       if(i*j <= self.num_of_groups*self.num_of_lines_per_group):
+       self.line_entries[i][j].config(state = DISABLED)
+       if i <= self.num_of_groups-1:
             # self.next_entries[i][j].config(state = NORMAL)
-            j += 1
-            if j == self.num_of_lines_per_group:
-                i +=1
-                j = 0
-            self.next_entries[i][j].config(state = NORMAL)
+            if i == self.num_of_groups-1 and j == self.num_of_lines_per_group-1:
+                print("end") 
+            else:
+                j += 1
+                if j == self.num_of_lines_per_group:
+                    i +=1
+                    j = 0
+                self.next_entries[i][j].config(state = NORMAL)
+                self.line_entries[i][j].config(state = NORMAL)
+            
+            
     ######
     # def next_entry(self):
       #  for btn in self.next_entries_cur_group:
@@ -161,6 +168,7 @@ class Root(Tk):
         self.cur_click = 0
         self.prev_lanes = num_lanes
         
+    
 
     def canvasClickCallBack(self, event):
         """The call back function when the mouse clicks on the image canvas.
@@ -170,6 +178,10 @@ class Root(Tk):
         event : obj
             The click event.
         """
+        global x_1 
+        global y_1 
+        global x_2 
+        global y_2     
         global next_clicked
         print(next_clicked)
         line_one = False
@@ -185,7 +197,8 @@ class Root(Tk):
             self.entry_strvars[self.cur_group][self.cur_line].set(_content)
         
         self.cur_click += 1
-            
+
+        
         if self.cur_click == self.num_of_clicks_per_line:
             self.cur_click = 0
             # self.imageCanvas.create_line(_content)
@@ -195,10 +208,7 @@ class Root(Tk):
             y_1 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1])
             x_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2])
             y_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3])
-            print(x_1)
-            print(y_1)
-            print(x_2)
-            print(y_2)
+            
              
             
             # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
@@ -209,26 +219,28 @@ class Root(Tk):
                 self.cur_group %= self.num_of_groups
 
         # Draw line on canvas
-        if next_clicked == True:
-            canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-
+            if next_clicked == True:
+                canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+                print(x_1)
+                print(y_1)
+                print(x_2)
+                print(y_2)
             # Delete line
-            self.imageCanvas.after(line_one == False, self.imageCanvas.delete, canvas_id_one) ######
+                self.imageCanvas.after(line_one == False, self.imageCanvas.delete, canvas_id_one) ######
             
-            self.cur_line += 1  # move to the next line
-            self.cur_click = 0
-            next_clicked = False
-            if self.cur_line == self.num_of_lines_per_group:
-                self.cur_line = 0
-                self.cur_group += 1
-                self.cur_group %= self.num_of_groups
+                self.cur_line += 1  # move to the next line
+                self.cur_click = 0
+                next_clicked = False
+                if self.cur_line == self.num_of_lines_per_group:
+                    self.cur_line = 0
+                    self.cur_group += 1
+                    self.cur_group %= self.num_of_groups
 
         
-    # i = 0
-    # j = 0
     def submitButtonClick(self):
         # global i
         # global j
+        global next_clicked
         """ handle button click event and output text from entry area"""
         input = self.entry_lane.get()
         print(input)
@@ -236,6 +248,8 @@ class Root(Tk):
         self.cur_line = 0
         self.submitButton.config(state = DISABLED)
         self.next_entries[0][0].config(state = NORMAL)
+        next_clicked = True
+
         # j += 1
         # if(i <= self.num_of_groups*self.num_of_lines_per_group):
            # self.next_entries[i][j].config(state = NORMAL)
