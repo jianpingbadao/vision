@@ -135,17 +135,21 @@ class Root(Tk):
         # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
             for m in range(self.num_of_lines_per_group):
-                # self.next_entries[n][m].destroy
-                # self.line_entries[n][m].destroy
+                # self.next_entries[n][m].destroy()
+                # self.line_entries[n][m].destroy()
                 self.next_entries[n][m].grid_forget()
                 self.line_entries[n][m].grid_remove()
         print(self.num_of_groups)
         print(self.num_of_lines_per_group)
+        self.entry_lane.grid_forget()
         # self.filename_strvar.set(self.filename) # Display filename
         self.submitButton.config(state = DISABLED)
-        self.entry_lane.config(state = NORMAL)
+        # self.entry_lane.config(state = NORMAL)
         self.num_of_groups = 0
-        self.entry_lane.config(state = DISABLED)
+        # self.entry_lane.update()
+        # self.entry_lane.config(state = DISABLED)
+        self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
+        self.entry_lane.grid(row = 1, column = 1)
         i = 0
         j = 0
         #self.imageCanvas.bind('<1>', self.canvasClickCallBack)
