@@ -21,9 +21,9 @@ val = False
 coord = None
 vid_x = 500 # Width of video
 vid_y = 300 # Height of video
-i = 0
-j = 0
-
+i = 0   # iterator for num of groups, used for next button
+j = 0   # iterator for num of lanes per group, used for next button
+end = False # boolean if all points have been input
 class Root(Tk):
 
     def __init__(self):
@@ -96,6 +96,8 @@ class Root(Tk):
             # self.next_entries[i][j].config(state = NORMAL)
             if i == self.num_of_groups-1 and j == self.num_of_lines_per_group-1:
                 print("end") 
+                # end = True
+                self.end()
             else:
                 j += 1
                 if j == self.num_of_lines_per_group:
@@ -168,7 +170,8 @@ class Root(Tk):
         self.cur_click = 0
         self.prev_lanes = num_lanes
         
-    
+    def end(self):
+        self.imageCanvas.unbind('<1>') # unbind canvas
 
     def canvasClickCallBack(self, event):
         """The call back function when the mouse clicks on the image canvas.
