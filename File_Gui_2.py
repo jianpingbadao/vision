@@ -132,11 +132,15 @@ class Root(Tk):
         self.filename = ' '
         self.button.config(state = NORMAL)
         
-
+        # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
             for m in range(self.num_of_lines_per_group):
-                self.next_entries[n][m].destroy
-                self.line_entries[n][m].destroy
+                # self.next_entries[n][m].destroy
+                # self.line_entries[n][m].destroy
+                self.next_entries[n][m].grid_forget()
+                self.line_entries[n][m].grid_remove()
+        print(self.num_of_groups)
+        print(self.num_of_lines_per_group)
         # self.filename_strvar.set(self.filename) # Display filename
         self.submitButton.config(state = DISABLED)
         self.entry_lane.config(state = NORMAL)
@@ -204,7 +208,11 @@ class Root(Tk):
         self.prev_lanes = num_lanes
         
     def end(self):
+        """a
+        Signal to end / freeze canvas to stop allowing button clicks
+        """
         self.imageCanvas.unbind('<1>') # unbind canvas
+
 
     def canvasClickCallBack(self, event):
         """The call back function when the mouse clicks on the image canvas.
