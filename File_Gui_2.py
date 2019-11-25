@@ -66,7 +66,7 @@ class Root(Tk):
 
         """Create Submit Button"""
         # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
-        self.submitButton = Button(self, command=self.submitButtonClick, text="Submit")
+        self.submitButton = Button(self, command=self.submitButtonClick, text="Submit", state = DISABLED)
         self.submitButton.grid(row=1, column=2)
 
         self.next_entry()
@@ -98,19 +98,24 @@ class Root(Tk):
         self.num_of_clicks_per_line = 2
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in range(self.num_of_groups)]
 
-        self.button_next = Button(self, text = "next", command = self.next_entry)
-        self.button_next.grid(row = 3, column = 2)
+        # self.button_next = Button(self, text = "next", command = self.next_entry)
+        # self.button_next.grid(row = 3, column = 2)
 
         self.line_entries = []
         start_row = 3
         start_col = 1
         for group in range(self.num_of_groups):
             line_entries_cur_group = []
+            # next_entries_cur_group = []
             for row in range(self.num_of_lines_per_group):
                 line_entry = Entry(self, textvariable=self.entry_strvars[group][row])
+                button_next = Button(self, text = "next", state = DISABLED, command = self.next_entry) # next button
+                # self.button_next.grid(row = 3, column = 2)
                 cur_row = start_row + row + group * self.num_of_lines_per_group
                 line_entry.grid(row=cur_row, column=start_col)
+                button_next.grid(row = cur_row, column = start_col +1)
                 line_entries_cur_group.append(line_entry)
+                # next_entries_cur_group.append(button_next)
             self.line_entries.append(line_entries_cur_group)
 
         if self.prev_lanes > self.num_of_groups: # check to see if the new amount of lanes is less than the previous
@@ -135,7 +140,7 @@ class Root(Tk):
         """
         global next_clicked
         print(next_clicked)
-
+        line_one = False
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
         
@@ -171,8 +176,13 @@ class Root(Tk):
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
 
+        # Draw line on canvas
         if next_clicked == True:
-            self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+            canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+
+            # Delete line
+            self.imageCanvas.after(line_one == False, self.imageCanvas.delete, canvas_id_one) ######
+            
             self.cur_line += 1  # move to the next line
             self.cur_click = 0
             next_clicked = False
@@ -189,6 +199,10 @@ class Root(Tk):
         print(input)
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
+        self.submitButton.config(state = DISABLED)
+        # self.button_next.config(state = NORMAL)
+        # self.submitButton.config(state = DISABLED)
+
         
 
 
@@ -236,12 +250,16 @@ class Root(Tk):
         global vid_x
         global vid_y
 
+        # Disable button
+        self.button.config(state = DISABLED)
+        self.submitButton.config(state = NORMAL)
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File") # Read File
 
         if not self.check_video_file(self.filename):
             return
 
         self.filename_strvar.set(self.filename) # Display filename
+        
         cap = cv2.VideoCapture(self.filename) # Play video of file
 
         # while True:
