@@ -52,11 +52,16 @@ class Root(Tk):
         self.filename_entry = Entry(self, textvariable=self.filename_strvar, width=40)
         self.filename_entry.grid(row=13, column=0)
         
+        # Reset
+        self.reset_button = Button(self, command=self.reset, text="Reset", state = NORMAL)
+        self.reset_button.grid(row = 14, column = 0)
+
+
         # Assigns num of lanes for data point entries
         num_lanes = 1    # Default 1 lane, for some reason can only increase lanes, can't decrease
         self.create_entries_to_hold_lines(num_lanes)
         self.label_lane = Label(self, text = "Enter # of lanes").grid(row = 0, column = 1)
-        self.entry_lane = Entry(self, textvariable = self.num_of_groups)
+        self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
         self.entry_lane.grid(row = 1, column = 1)
 
         self.mouse = Controller()
@@ -115,7 +120,35 @@ class Root(Tk):
         # self.next_entries_cur_group[index].configure(state = 'disabled')
 
     ######
-    
+    ### Reset
+    def reset(self):
+        ''' Reset will reset all the values on the screen.
+        User will be able to choose a new file and start over
+        File must be enabled
+        Text boxes must be cleared and lanes must be destroyed
+        '''
+        global i
+        global j
+        self.filename = ' '
+        self.button.config(state = NORMAL)
+        
+
+        for n in range(self.num_of_groups):
+            for m in range(self.num_of_lines_per_group):
+                self.next_entries[n][m].destroy
+                self.line_entries[n][m].destroy
+        # self.filename_strvar.set(self.filename) # Display filename
+        self.submitButton.config(state = DISABLED)
+        self.entry_lane.config(state = NORMAL)
+        self.num_of_groups = 0
+        self.entry_lane.config(state = DISABLED)
+        i = 0
+        j = 0
+        #self.imageCanvas.bind('<1>', self.canvasClickCallBack)
+        self.imageCanvas.bind('<1>', self.canvasClickCallBack)
+
+
+
     def create_entries_to_hold_lines(self, num_lanes):
         """
         Create entries to hold information about the lines that we will click/enter later.
@@ -139,7 +172,7 @@ class Root(Tk):
             line_entries_cur_group = []
             next_entries_cur_group = []
             for row in range(self.num_of_lines_per_group):
-                line_entry = Entry(self, textvariable=self.entry_strvars[group][row])
+                line_entry = Entry(self, textvariable=self.entry_strvars[group][row], state = DISABLED)
                 # button_next = Button(self, text = "next", state = DISABLED, command = lambda: self.next_entry(next_button_index)) # next button
                 
                 # Create next button
@@ -211,8 +244,12 @@ class Root(Tk):
             y_1 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1])
             x_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2])
             y_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3])
-            
-             
+                            
+            canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+            self.imageCanvas.after(1000, self.imageCanvas.delete, canvas_id_one) # Delete after 1 second
+            if next_clicked == True:
+                canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+                # next_clicked = False 
             
             # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
             # self.imageCanvas.create_line(0,0,40,40)
@@ -222,6 +259,7 @@ class Root(Tk):
                 self.cur_group %= self.num_of_groups
 
         # Draw line on canvas
+
             if next_clicked == True:
                 canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
                 print(x_1)
@@ -250,8 +288,11 @@ class Root(Tk):
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
         self.submitButton.config(state = DISABLED)
-        self.next_entries[0][0].config(state = NORMAL)
+        self.next_entries[0][0].config(state = NORMAL) # enable first next button
+        self.line_entries[0][0].config(state = NORMAL) # enable first text entry
         next_clicked = True
+        self.entry_lane.config(state = DISABLED)
+        # self.imageCanvas.bind('<1>')
 
         # j += 1
         # if(i <= self.num_of_groups*self.num_of_lines_per_group):
@@ -312,6 +353,7 @@ class Root(Tk):
 
         # Disable button
         self.button.config(state = DISABLED)
+        self.entry_lane.config(state = NORMAL)
         self.submitButton.config(state = NORMAL)
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File") # Read File
 
@@ -319,7 +361,11 @@ class Root(Tk):
             return
 
         self.filename_strvar.set(self.filename) # Display filename
-        
+        # self.filename_strvar = Entry(self, text = self.filename)
+        # self.filename_strvar.grid(row = 13, column = 0)
+        # self.filename_strvar.config(state = DISABLED)
+
+
         cap = cv2.VideoCapture(self.filename) # Play video of file
 
         # while True:
