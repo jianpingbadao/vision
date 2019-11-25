@@ -14,7 +14,7 @@ image_folder = '/Users/paulyp123/Desktop/vision-master/' + str(time.time())
 os.mkdir(image_folder)
 os.chdir(image_folder)
 
-for x in range(100):
+for x in range(20):
 	time.sleep(.1)
 	driver.save_screenshot(str(time.time()) + ".png")
 	
