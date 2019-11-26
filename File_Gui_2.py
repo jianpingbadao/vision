@@ -56,6 +56,9 @@ class Root(Tk):
         self.reset_button = Button(self, command=self.reset, text="Reset", state = NORMAL)
         self.reset_button.grid(row = 14, column = 0)
 
+        # Process
+        self.process_button = Button(self, command=self.process, text="Process", state = NORMAL)
+        self.process_button.grid(row = 15, column = 0)
 
         # Assigns num of lanes for data point entries
         num_lanes = 1    # Default 1 lane, for some reason can only increase lanes, can't decrease
@@ -118,6 +121,27 @@ class Root(Tk):
        #     if str(btn['state']) == 'disabled':
            #  btn.configure(state = 'normal')
         # self.next_entries_cur_group[index].configure(state = 'disabled')
+    
+    
+    # Process
+    def process(self):
+        '''
+        should take in filename, # of lanes, # of lines per group,
+        use those to iterate through each entry and collect points.
+        Use point data with vid_x, vid_y size to get ratio
+        Send to other video processing function for process.
+        In other video processing function use ratio to set lines 
+        on original video size.
+        Alternatively could probably set video to be processed to specific size
+        as is done in this file for the screen shot.
+
+        Probably want to disable this function/button until all data is entered
+        to avoid errors.
+        '''
+        print(self.num_of_groups)
+        print(self.num_of_lines_per_group)
+        print(self.filename)
+
 
     ######
     ### Reset
