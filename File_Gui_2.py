@@ -41,7 +41,7 @@ class Root(Tk):
         global vid_y
         self.imageCanvas = Canvas(self, width=vid_x, height=vid_y, bg='grey')
         self.imageCanvas.bind("<Button-1>", self.canvasClickCallBack)
-        self.imageCanvas.grid(row=0, column=0 , rowspan=10 ,columnspan=1)
+        self.imageCanvas.grid(row=0, column=0 , rowspan=10 ,columnspan=3) # Spans 10 rows, 3 cols
 
         self.labelFrame = ttk.LabelFrame(self, text="Open A Video File")
         self.labelFrame.grid(row=11, column=0, padx=10, pady=20)
@@ -52,20 +52,24 @@ class Root(Tk):
         self.filename_entry = Entry(self, textvariable=self.filename_strvar, width=40)
         self.filename_entry.grid(row=13, column=0)
         
+        # URL Enter Button
+        self.enter_button = Button(self, command=self.enter_URL, text="Enter", state = NORMAL)
+        self.enter_button.grid(row = 13, column = 1)
+
         # Reset
         self.reset_button = Button(self, command=self.reset, text="Reset", state = NORMAL)
-        self.reset_button.grid(row = 14, column = 0)
+        self.reset_button.grid(row = 11, column = 2)
 
         # Process
         self.process_button = Button(self, command=self.process, text="Process", state = NORMAL)
-        self.process_button.grid(row = 15, column = 0)
+        self.process_button.grid(row = 13, column = 2)
 
         # Assigns num of lanes for data point entries
         num_lanes = 1    # Default 1 lane, for some reason can only increase lanes, can't decrease
         self.create_entries_to_hold_lines(num_lanes)
-        self.label_lane = Label(self, text = "Enter # of lanes").grid(row = 0, column = 1)
+        self.label_lane = Label(self, text = "Enter # of lanes").grid(row = 0, column = 4)
         self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
-        self.entry_lane.grid(row = 1, column = 1)
+        self.entry_lane.grid(row = 1, column = 4)
 
         self.mouse = Controller()
         global coord
@@ -76,7 +80,7 @@ class Root(Tk):
         """Create Submit Button"""
         # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
         self.submitButton = Button(self, command=self.submitButtonClick, text="Submit", state = DISABLED)
-        self.submitButton.grid(row=1, column=2)
+        self.submitButton.grid(row=1, column=5)
 
         # self.next_entry(index)
         global next_clicked 
@@ -90,6 +94,18 @@ class Root(Tk):
             # self.submitButtonClick()
 
         # self.next_entries = []
+    
+    # URL text Handler 
+    def enter_URL(self):
+        '''
+        Takes in URL input to find link and then uses that for video
+        '''
+        self.filename = self.filename_entry
+        self.enter_button.config(state = DISABLED)
+        self.button.config(state = DISABLED) # Disable file browser button
+        self.submitButton.config(state = NORMAL)
+        self.entry_lane.config(state = NORMAL)
+
 
     def next_entry(self):
        global i
@@ -155,7 +171,8 @@ class Root(Tk):
         global j
         self.filename = ' '
         self.button.config(state = NORMAL)
-        
+        self.enter_button.config(state = NORMAL)
+
         # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
             for m in range(self.num_of_lines_per_group):
@@ -173,7 +190,7 @@ class Root(Tk):
         # self.entry_lane.update()
         # self.entry_lane.config(state = DISABLED)
         self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
-        self.entry_lane.grid(row = 1, column = 1)
+        self.entry_lane.grid(row = 1, column = 4)
         i = 0
         j = 0
         #self.imageCanvas.bind('<1>', self.canvasClickCallBack)
@@ -198,7 +215,7 @@ class Root(Tk):
         self.next_entries = [] # list of list of buttons
         
         start_row = 3
-        start_col = 1
+        start_col = 4
         next_button_index = 0 # keeps track of next button
         for group in range(self.num_of_groups):
             line_entries_cur_group = []
@@ -392,6 +409,8 @@ class Root(Tk):
         self.entry_lane.config(state = NORMAL)
         self.submitButton.config(state = NORMAL)
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File") # Read File
+
+        self.enter_button.config(state = DISABLED) # Disable enter button
 
         if not self.check_video_file(self.filename):
             return
