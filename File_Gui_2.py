@@ -158,6 +158,39 @@ class Root(Tk):
         print(self.num_of_lines_per_group)
         print(self.filename)
 
+        self.group_label = Label(self, text = "Lane Data").grid(row = 0, column = 6)
+        # self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
+        # self.entry_lane.grid(row = 1, column = 4)
+
+        option_list = ["UP", "DOWN"]
+        # self.variable = StringVar()
+        self.count_strvar = StringVar()
+        self.speed_strvar = StringVar()
+
+
+        # Loop to create data locations
+        start_row = 3
+        start_col = 6
+        for group in range(self.num_of_groups):
+            str_num = '# ' + str(group + 1)
+            self.group_num = Label(self, text = str_num).grid(row = start_row, column = start_col)
+            
+            self.variable = StringVar()
+            self.variable.set(option_list[0])
+
+            self.opt = OptionMenu(self, self.variable, *option_list).grid(row = start_row, column = start_col +1)
+            # self.opt.config(width=90, font=('Helvetica', 12))
+            start_row +=1
+            self.Count_label = Label(self, text = "Count").grid(row = start_row, column = start_col)
+            self.Speed_label = Label(self, text = "Speed mph").grid(row = start_row, column = start_col +1)
+            start_row +=1
+
+            # Counts that need to be updated with processing code
+            self.Count_num = Label(self, textvariable=self.count_strvar).grid(row = start_row, column = start_col)
+            self.Speed_num = Label(self, textvariable=self.speed_strvar).grid(row = start_row, column = start_col +1)
+            start_row +=1
+            
+
 
     ######
     ### Reset
