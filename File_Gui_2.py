@@ -114,6 +114,12 @@ class Root(Tk):
        global next_clicked
        next_clicked = True
        print(next_clicked) # debug
+
+       self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+       self.cur_line +=1
+
+
+
        self.next_entries[i][j].config(state = DISABLED)
        self.line_entries[i][j].config(state = DISABLED)
        if i <= self.num_of_groups-1:
@@ -306,7 +312,7 @@ class Root(Tk):
         global y_2     
         global next_clicked
         print(next_clicked)
-        line_one = False
+        # line_one = False
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
         
@@ -333,8 +339,8 @@ class Root(Tk):
                             
             canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
             self.imageCanvas.after(1000, self.imageCanvas.delete, canvas_id_one) # Delete after 1 second
-            if next_clicked == True:
-                canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+            # if next_clicked == True:
+                # canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
                 # next_clicked = False 
             
             # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
@@ -344,25 +350,7 @@ class Root(Tk):
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
 
-        # Draw line on canvas
-
-            if next_clicked == True:
-                canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-                print(x_1)
-                print(y_1)
-                print(x_2)
-                print(y_2)
-            # Delete line
-                self.imageCanvas.after(line_one == False, self.imageCanvas.delete, canvas_id_one) ######
-            
-                self.cur_line += 1  # move to the next line
-                self.cur_click = 0
-                next_clicked = False
-                if self.cur_line == self.num_of_lines_per_group:
-                    self.cur_line = 0
-                    self.cur_group += 1
-                    self.cur_group %= self.num_of_groups
-
+        
         
     def submitButtonClick(self):
         # global i
