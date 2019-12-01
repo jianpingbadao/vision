@@ -17,7 +17,7 @@ def run(website_name):
 	#take multiple screenshots
 	#figure out how many duplicates you need
 	for x in range(20):
-		time.sleep(.1)
+		time.sleep(1)
 		driver.save_screenshot(str(time.time()) + ".png")
 
 	driver.close()
@@ -35,19 +35,16 @@ def run(website_name):
 	width = right - left
 	height = down - top
 	video = cv2.VideoWriter(video_name, 0, 1, (width, height))
-	#
-
+	
 	for image in images:
 		im = Image.open(image)
 		crop = im.crop((left, top, right, down))
 		crop.save(image)
 		video.write(cv2.imread(os.path.join(image_folder, image)))
-	#os.chdir('/Users/paulyp123/Desktop/vision-master/')
-	
 
 	cv2.destroyAllWindows()
 	video.release()
-	#for image in images:
-		#os.remove(image)
+	for image in images:
+		os.remove(image)
 
 	return strTime

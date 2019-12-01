@@ -4,7 +4,7 @@ import vehicles
 import time
 import os
 
-def execute(file_n, result_n, up_dwn):
+def execute(directory, file_n, result_n, up_dwn):
     """ 
         purpose: execute(file_n, result_n, up_dwn) counts cars going up
         and down based on parameters. When it is run it analyzes the video,
@@ -23,6 +23,7 @@ def execute(file_n, result_n, up_dwn):
         returns:
         none
     """
+    os.chdir(directory)
     file_name = file_n
     result_name = result_n
     up_down = up_dwn
@@ -238,3 +239,5 @@ def execute(file_n, result_n, up_dwn):
     open(result_name)
     cap.release()
     cv2.destroyAllWindows()
+
+    return (cnt_up, cnt_down)

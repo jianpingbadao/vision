@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+Web=${1?Error: no website given}
+Web2=${2?Error: no website given}
+
+echo "Capturing $Web and $Web2"
+
+python WebsiteVidCapture.py $Web &
+
+python WebsiteVidCapture.py $Web2 &
