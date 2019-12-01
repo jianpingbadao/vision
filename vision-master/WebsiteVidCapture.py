@@ -1,9 +1,11 @@
 from selenium import webdriver
 from PIL import Image
+from main import execute
 #from moviepy.editor import *
 import time
 import cv2
 import os
+import sys
 
 def run(website_name):
 	driver = webdriver.Chrome(executable_path='/Users/paulyp123/Desktop/chromedriver')
@@ -45,6 +47,13 @@ def run(website_name):
 	cv2.destroyAllWindows()
 	video.release()
 	for image in images:
-		os.remove(image)
+                os.remove(image)
 
 	return strTime
+arg1 = sys.argv[1]
+
+while(1>0):
+	strTime = run(arg1)
+	os.chdir('/Users/paulyp123/Desktop/vision-master/'+strTime)
+	tup = execute('/Users/paulyp123/Desktop/vision-master/'+strTime, "video.avi", "result", 2)
+	print("up: " + str(tup[0]) + " down: " + str(tup[-1]))
