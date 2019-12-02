@@ -17,6 +17,13 @@ from pynput.mouse import Controller
 
 import os
 
+### Pauls imports
+from selenium import webdriver
+from main import execute
+import time
+import sys
+###
+
 val = False
 coord = None
 vid_x = 500 # Width of video
@@ -100,11 +107,13 @@ class Root(Tk):
         '''
         Takes in URL input to find link and then uses that for video
         '''
-        self.filename = self.filename_entry
+        # self.filename = self.filename_strvar.get()
         self.enter_button.config(state = DISABLED)
         self.button.config(state = DISABLED) # Disable file browser button
         self.submitButton.config(state = NORMAL)
         self.entry_lane.config(state = NORMAL)
+        print(self.filename_strvar.get()) # debug Input UrL
+        self.run(self, self.filename_strvar.get()) # sends link to url run method
 
 
     def next_entry(self):
@@ -133,7 +142,7 @@ class Root(Tk):
        y_2 = int(y_2)
 
        print(x_1) # debug
-       
+
        self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
        self.cur_line +=1
 
@@ -462,7 +471,7 @@ class Root(Tk):
 
 
         cap = cv2.VideoCapture(self.filename) # Play video of file
-
+        
         # while True:
         # Video 
         _, self.frame = cap.read()
@@ -496,6 +505,63 @@ class Root(Tk):
     #def printf(self):
      #   print(self.fileDialog())
 
+
+    ### Pauls code Method to run from url
+    def run(self, website_name):
+	    driver = webdriver.Chrome(executable_path='/Users/paulyp123/Desktop/chromedriver')
+	    # https://nyctmc.org/google_popup.php?cid=975
+        driver.get(website_name)
+	    strTime = str(time.time())
+    	image_folder = '/Users/paulyp123/Desktop/vision-master/' + strTime
+    	os.mkdir(image_folder)
+    	os.chdir(image_folder)
+
+    	#take multiple screenshots
+	    #figure out how many duplicates you need
+	    for x in range(20):
+    		time.sleep(1)
+    		driver.save_screenshot(str(time.time()) + ".png")
+
+    	driver.close()
+
+
+    	video_name = 'video.avi'
+
+        ### Assign filename to retrieve video
+        self.filename = video_name
+
+    	images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
+    	images.sort()
+
+    	left = 848
+    	top = 127
+	    right = 1552
+    	down = 541
+	    width = right - left
+    	height = down - top
+    	video = cv2.VideoWriter(video_name, 0, 1, (width, height))
+	
+    	for image in images:
+    		im = Image.open(image)
+    		crop = im.crop((left, top, right, down))
+    		crop.save(image)
+    		video.write(cv2.imread(os.path.join(image_folder, image)))
+
+    	cv2.destroyAllWindows()
+    	video.release()
+    	for image in images:
+            os.remove(image)
+
+    	return strTime
+        arg1 = sys.argv[1]
+
+    while(1>0):
+    	strTime = run(arg1)
+    	os.chdir('/Users/paulyp123/Desktop/vision-master/'+strTime)
+    	tup = execute('/Users/paulyp123/Desktop/vision-master/'+strTime, "video.avi", "result", 2)
+    	print("up: " + str(tup[0]) + " down: " + str(tup[-1]))
+
+    ### End of pauls code
 
 if __name__ == '__main__':
     root = Root()

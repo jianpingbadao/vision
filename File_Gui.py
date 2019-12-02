@@ -17,6 +17,8 @@ from pynput.mouse import Controller
 
 import os
 
+
+
 val = False
 coord = None
 vid_x = 500 # Width of video
@@ -100,20 +102,50 @@ class Root(Tk):
         '''
         Takes in URL input to find link and then uses that for video
         '''
-        self.filename = self.filename_entry
+        # self.filename = self.filename_strvar.get()
         self.enter_button.config(state = DISABLED)
         self.button.config(state = DISABLED) # Disable file browser button
         self.submitButton.config(state = NORMAL)
         self.entry_lane.config(state = NORMAL)
+        print(self.filename_strvar.get()) # debug Input UrL
 
 
     def next_entry(self):
        global i
        global j
+       global x_1
+       global y_1 
+       global x_2 
+       global y_2
+
        print("next") # debug
        global next_clicked
        next_clicked = True
        print(next_clicked) # debug
+    
+       x_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0]
+       y_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1]
+       x_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2]
+       y_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3]
+
+       print(x_1) # debug
+
+       x_1 = int(x_1)
+       y_1 = int(y_1)
+       x_2 = int(x_2)
+       y_2 = int(y_2)
+
+       print(x_1) # debug
+
+       self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+       self.cur_line +=1
+
+       if self.cur_line == self.num_of_lines_per_group:
+            self.cur_line = 0
+            self.cur_group += 1
+            self.cur_group %= self.num_of_groups
+
+
        self.next_entries[i][j].config(state = DISABLED)
        self.line_entries[i][j].config(state = DISABLED)
        if i <= self.num_of_groups-1:
@@ -157,6 +189,39 @@ class Root(Tk):
         print(self.num_of_groups)
         print(self.num_of_lines_per_group)
         print(self.filename)
+
+        self.group_label = Label(self, text = "Lane Data").grid(row = 0, column = 6)
+        # self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
+        # self.entry_lane.grid(row = 1, column = 4)
+
+        option_list = ["UP", "DOWN"]
+        # self.variable = StringVar()
+        self.count_strvar = StringVar()
+        self.speed_strvar = StringVar()
+
+
+        # Loop to create data locations
+        start_row = 3
+        start_col = 6
+        for group in range(self.num_of_groups):
+            str_num = '# ' + str(group + 1)
+            self.group_num = Label(self, text = str_num).grid(row = start_row, column = start_col)
+            
+            self.variable = StringVar()
+            self.variable.set(option_list[0])
+
+            self.opt = OptionMenu(self, self.variable, *option_list).grid(row = start_row, column = start_col +1)
+            # self.opt.config(width=90, font=('Helvetica', 12))
+            start_row +=1
+            self.Count_label = Label(self, text = "Count").grid(row = start_row, column = start_col)
+            self.Speed_label = Label(self, text = "Speed mph").grid(row = start_row, column = start_col +1)
+            start_row +=1
+
+            # Counts that need to be updated with processing code
+            self.Count_num = Label(self, textvariable=self.count_strvar).grid(row = start_row, column = start_col)
+            self.Speed_num = Label(self, textvariable=self.speed_strvar).grid(row = start_row, column = start_col +1)
+            start_row +=1
+            
 
 
     ######
@@ -273,7 +338,7 @@ class Root(Tk):
         global y_2     
         global next_clicked
         print(next_clicked)
-        line_one = False
+        # line_one = False
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
         
@@ -300,8 +365,8 @@ class Root(Tk):
                             
             canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
             self.imageCanvas.after(1000, self.imageCanvas.delete, canvas_id_one) # Delete after 1 second
-            if next_clicked == True:
-                canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+            # if next_clicked == True:
+                # canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
                 # next_clicked = False 
             
             # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
@@ -311,25 +376,7 @@ class Root(Tk):
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
 
-        # Draw line on canvas
-
-            if next_clicked == True:
-                canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-                print(x_1)
-                print(y_1)
-                print(x_2)
-                print(y_2)
-            # Delete line
-                self.imageCanvas.after(line_one == False, self.imageCanvas.delete, canvas_id_one) ######
-            
-                self.cur_line += 1  # move to the next line
-                self.cur_click = 0
-                next_clicked = False
-                if self.cur_line == self.num_of_lines_per_group:
-                    self.cur_line = 0
-                    self.cur_group += 1
-                    self.cur_group %= self.num_of_groups
-
+        
         
     def submitButtonClick(self):
         # global i
