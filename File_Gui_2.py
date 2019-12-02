@@ -110,11 +110,30 @@ class Root(Tk):
     def next_entry(self):
        global i
        global j
+       global x_1
+       global y_1 
+       global x_2 
+       global y_2
+
        print("next") # debug
        global next_clicked
        next_clicked = True
        print(next_clicked) # debug
+    
+       x_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0]
+       y_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1]
+       x_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2]
+       y_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3]
 
+       print(x_1) # debug
+
+       x_1 = int(x_1)
+       y_1 = int(y_1)
+       x_2 = int(x_2)
+       y_2 = int(y_2)
+
+       print(x_1) # debug
+       
        self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
        self.cur_line +=1
 
