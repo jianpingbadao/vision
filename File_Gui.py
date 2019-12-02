@@ -247,11 +247,15 @@ class Root(Tk):
                 self.line_entries[n][m].grid_remove()
         print(self.num_of_groups)
         print(self.num_of_lines_per_group)
-        self.entry_lane.grid_forget()
+        # self.entry_lane.grid_remove()
+        # self.entry_lane.delete(0, None)
+        self.entry_lane.destroy()
         # self.filename_strvar.set(self.filename) # Display filename
         self.submitButton.config(state = DISABLED)
         # self.entry_lane.config(state = NORMAL)
+        # self.num_of_groups = 0
         self.num_of_groups = 0
+        print(self.num_of_groups)
         # self.entry_lane.update()
         # self.entry_lane.config(state = DISABLED)
         self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
@@ -259,6 +263,7 @@ class Root(Tk):
         i = 0
         j = 0
         #self.imageCanvas.bind('<1>', self.canvasClickCallBack)
+        self.imageCanvas.delete("all")
         self.imageCanvas.bind('<1>', self.canvasClickCallBack)
 
 
