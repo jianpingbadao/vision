@@ -8,11 +8,11 @@ import os
 import sys
 
 def run(website_name):
-	driver = webdriver.Chrome(executable_path='/Users/paulyp123/Desktop/chromedriver')
+	driver = webdriver.Chrome(executable_path='~/Desktop/chromedriver')
 	#https://nyctmc.org/google_popup.php?cid=975
 	driver.get(website_name)
 	strTime = str(time.time())
-	image_folder = '/Users/paulyp123/Desktop/vision-master/' + strTime
+	image_folder = '~/Desktop/vision-master/' + strTime
 	os.mkdir(image_folder)
 	os.chdir(image_folder)
 
@@ -54,6 +54,6 @@ arg1 = sys.argv[1]
 
 while(1>0):
 	strTime = run(arg1)
-	os.chdir('/Users/paulyp123/Desktop/vision-master/'+strTime)
-	tup = execute('/Users/paulyp123/Desktop/vision-master/'+strTime, "video.avi", "result", 2)
+	os.chdir('~/Desktop/vision-master/'+strTime)
+	tup = execute('~/Desktop/vision-master/'+strTime, "video.avi", "result", 2)
 	print("up: " + str(tup[0]) + " down: " + str(tup[-1]))
