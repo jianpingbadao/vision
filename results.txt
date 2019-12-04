@@ -1,2 +1,0 @@
-Count going up: UP: 0
-Count going down: DOWN: 0
