@@ -11,7 +11,6 @@ import tkinter
 from tkinter import ttk
 from tkinter import *
 from tkinter import filedialog
-import imageio
 from PIL import Image, ImageTk
 
 import os
@@ -57,7 +56,7 @@ class Root(Tk):
         self.filename_strvar = StringVar()
         self.filename_entry = Entry(self, textvariable=self.filename_strvar, width=40)
         self.filename_entry.grid(row=13, column=0)
-        
+
         # URL Enter Button
         self.enter_button = Button(self, command=self.enter_URL, text="Enter", state = NORMAL)
         self.enter_button.grid(row = 13, column = 1)
@@ -99,7 +98,7 @@ class Root(Tk):
             # self.submitButtonClick()
 
         # self.next_entries = []
-    
+
     # URL text Handler 
     def enter_URL(self):
         '''
@@ -126,7 +125,7 @@ class Root(Tk):
        global next_clicked
        next_clicked = True
        print(next_clicked) # debug
-    
+
        x_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0]
        y_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1]
        x_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2]
@@ -144,8 +143,6 @@ class Root(Tk):
        self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
        self.cur_line +=1
 
-
-
        self.next_entries[i][j].config(state = DISABLED)
        self.line_entries[i][j].config(state = DISABLED)
        if i <= self.num_of_groups-1:
@@ -161,16 +158,16 @@ class Root(Tk):
                     j = 0
                 self.next_entries[i][j].config(state = NORMAL)
                 self.line_entries[i][j].config(state = NORMAL)
-            
-            
+
+
     ######
     # def next_entry(self):
       #  for btn in self.next_entries_cur_group:
        #     if str(btn['state']) == 'disabled':
            #  btn.configure(state = 'normal')
         # self.next_entries_cur_group[index].configure(state = 'disabled')
-    
-    
+
+
     # Process
     def process(self):
         '''
@@ -206,7 +203,7 @@ class Root(Tk):
         for group in range(self.num_of_groups):
             str_num = '# ' + str(group + 1)
             self.group_num = Label(self, text = str_num).grid(row = start_row, column = start_col)
-            
+
             self.variable = StringVar()
             self.variable.set(option_list[0])
 
@@ -221,7 +218,6 @@ class Root(Tk):
             self.Count_num = Label(self, textvariable=self.count_strvar).grid(row = start_row, column = start_col)
             self.Speed_num = Label(self, textvariable=self.speed_strvar).grid(row = start_row, column = start_col +1)
             start_row +=1
-            
 
 
     ######
@@ -262,7 +258,6 @@ class Root(Tk):
         self.imageCanvas.bind('<1>', self.canvasClickCallBack)
 
 
-
     def create_entries_to_hold_lines(self, num_lanes):
         """
         Create entries to hold information about the lines that we will click/enter later.
@@ -272,13 +267,13 @@ class Root(Tk):
         self.num_of_lines_per_group = 3
         self.num_of_clicks_per_line = 2
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in range(self.num_of_groups)]
-        
+
         # self.button_next = Button(self, text = "next", command = self.next_entry)
         # self.button_next.grid(row = 3, column = 2)
 
         self.line_entries = [] # list of list of text widgets
         self.next_entries = [] # list of list of buttons
-        
+
         start_row = 3
         start_col = 4
         next_button_index = 0 # keeps track of next button
@@ -288,7 +283,7 @@ class Root(Tk):
             for row in range(self.num_of_lines_per_group):
                 line_entry = Entry(self, textvariable=self.entry_strvars[group][row], state = DISABLED)
                 # button_next = Button(self, text = "next", state = DISABLED, command = lambda: self.next_entry(next_button_index)) # next button
-                
+
                 # Create next button
                 # next_entries_cur_group.append(Button(self, text=("next"+ str(next_button_index)), state = DISABLED, command=lambda c=row: print(next_entries_cur_group[c].cget("text"))))
                 next_button_index += 1
@@ -299,11 +294,11 @@ class Root(Tk):
                 next_entries_cur_group[row].grid(row = cur_row, column = start_col +1)
                 line_entries_cur_group.append(line_entry)
                 # next_entries_cur_group.append(button_next)
-                
+
             # next_entries_cur_group[1].config(state = DISABLED) # disables button 2 in each group.
             self.next_entries.append(next_entries_cur_group)
             self.line_entries.append(line_entries_cur_group)
-        
+
         # self.next_entries[0][1].config(state = NORMAL) # enable disable buttons
 
         if self.prev_lanes > self.num_of_groups: # check to see if the new amount of lanes is less than the previous
@@ -316,7 +311,8 @@ class Root(Tk):
         self.cur_line = 0
         self.cur_click = 0
         self.prev_lanes = num_lanes
-        
+
+
     def end(self):
         """a
         Signal to end / freeze canvas to stop allowing button clicks
@@ -341,7 +337,6 @@ class Root(Tk):
         # line_one = False
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
-        
 
         if self.cur_click == 0:
             self.entry_strvars[self.cur_group][self.cur_line].set(f"{event.x}, {event.y}")
@@ -349,10 +344,9 @@ class Root(Tk):
             _content = self.entry_strvars[self.cur_group][self.cur_line].get()
             _content += f", {event.x}, {event.y}"
             self.entry_strvars[self.cur_group][self.cur_line].set(_content)
-        
+
         self.cur_click += 1
 
-        
         if self.cur_click == self.num_of_clicks_per_line:
             self.cur_click = 0
             # self.imageCanvas.create_line(_content)
@@ -362,13 +356,13 @@ class Root(Tk):
             y_1 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1])
             x_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2])
             y_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3])
-                            
+
             canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
             self.imageCanvas.after(1000, self.imageCanvas.delete, canvas_id_one) # Delete after 1 second
             # if next_clicked == True:
                 # canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
                 # next_clicked = False 
-            
+
             # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
             # self.imageCanvas.create_line(0,0,40,40)
             if self.cur_line == self.num_of_lines_per_group:
@@ -376,8 +370,7 @@ class Root(Tk):
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
 
-        
-        
+
     def submitButtonClick(self):
         # global i
         # global j
@@ -403,18 +396,6 @@ class Root(Tk):
                # j = 0
         # self.button_next.config(state = NORMAL)
         # self.submitButton.config(state = DISABLED)
-
-        
-
-
-    # def click(self):
-      #  global vid_x
-       # global vid_y
-       # x = vid_x + 100
-       # y = vid_y + 100
-       # self.vid_button = ttk.Button(self)
-       # self.vid_button.config(width = x, height = y)
-       # self.vid_button.grid(row = 0, column = 0)
 
 
     def create_file_dialog_button(self):
@@ -466,7 +447,6 @@ class Root(Tk):
         # self.filename_strvar.grid(row = 13, column = 0)
         # self.filename_strvar.config(state = DISABLED)
 
-
         cap = cv2.VideoCapture(self.filename) # Play video of file
         
         # while True:
@@ -486,7 +466,6 @@ class Root(Tk):
         ##### Draw lines
         # self.imageCanvas.create_line()
 
-
         self.video_file_loaded = True
 
         # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.submitButtonClick)
@@ -498,65 +477,61 @@ class Root(Tk):
         cap.release()
         cv2.destroyAllWindows()
         # return self.filename
-    
-    #def printf(self):
-     #   print(self.fileDialog())
 
 
     ### Pauls code Method to run from url
     def run(self, website_name):
-	    driver = webdriver.Chrome(executable_path='/Users/paulyp123/Desktop/chromedriver')
-	    # https://nyctmc.org/google_popup.php?cid=975
+        driver = webdriver.Chrome(executable_path='/Users/paulyp123/Desktop/chromedriver')
+        # https://nyctmc.org/google_popup.php?cid=975
         driver.get(website_name)
-	    strTime = str(time.time())
-    	image_folder = '/Users/paulyp123/Desktop/vision-master/' + strTime
-    	os.mkdir(image_folder)
-    	os.chdir(image_folder)
+        strTime = str(time.time())
+        image_folder = '/Users/paulyp123/Desktop/vision-master/' + strTime
+        os.mkdir(image_folder)
+        os.chdir(image_folder)
 
-    	#take multiple screenshots
-	    #figure out how many duplicates you need
-	    for x in range(20):
-    		time.sleep(1)
-    		driver.save_screenshot(str(time.time()) + ".png")
+        #take multiple screenshots
+        #figure out how many duplicates you need
+        for x in range(20):
+            time.sleep(1)
+            driver.save_screenshot(str(time.time()) + ".png")
 
-    	driver.close()
+        driver.close()
 
-
-    	video_name = 'video.avi'
+        video_name = 'video.avi'
 
         ### Assign filename to retrieve video
         self.filename = video_name
 
-    	images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
-    	images.sort()
+        images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
+        images.sort()
 
-    	left = 848
-    	top = 127
-	    right = 1552
-    	down = 541
-	    width = right - left
-    	height = down - top
-    	video = cv2.VideoWriter(video_name, 0, 1, (width, height))
-	
-    	for image in images:
-    		im = Image.open(image)
-    		crop = im.crop((left, top, right, down))
-    		crop.save(image)
-    		video.write(cv2.imread(os.path.join(image_folder, image)))
+        left = 848
+        top = 127
+        right = 1552
+        down = 541
+        width = right - left
+        height = down - top
+        video = cv2.VideoWriter(video_name, 0, 1, (width, height))
 
-    	cv2.destroyAllWindows()
-    	video.release()
-    	for image in images:
+        for image in images:
+            im = Image.open(image)
+            crop = im.crop((left, top, right, down))
+            crop.save(image)
+            video.write(cv2.imread(os.path.join(image_folder, image)))
+
+        cv2.destroyAllWindows()
+        video.release()
+        for image in images:
             os.remove(image)
 
-    	return strTime
+        return strTime
         arg1 = sys.argv[1]
 
     while(1>0):
-    	strTime = run(arg1)
-    	os.chdir('/Users/paulyp123/Desktop/vision-master/'+strTime)
-    	tup = execute('/Users/paulyp123/Desktop/vision-master/'+strTime, "video.avi", "result", 2)
-    	print("up: " + str(tup[0]) + " down: " + str(tup[-1]))
+        strTime = run(arg1)
+        os.chdir('/Users/paulyp123/Desktop/vision-master/'+strTime)
+        tup = execute('/Users/paulyp123/Desktop/vision-master/'+strTime, "video.avi", "result", 2)
+        print("up: " + str(tup[0]) + " down: " + str(tup[-1]))
 
     ### End of pauls code
 
