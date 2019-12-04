@@ -6,18 +6,32 @@ import time
 import cv2
 import os
 import sys
+from datetime import datetime
 
 
 desktop_path = os.path.expanduser("~/Desktop/")
 chromedriver_path = os.path.join(desktop_path, "chromedriver")
 vision_mater_path = os.path.join(desktop_path, "vision-master")
 
+def get_current_time():
+    """
+    Get current time in an easy to read format
+
+    Returns
+    -------
+    current time, type: String
+        Current time in format, "YYYY-MM-DD-HH-MM-SS-Microsec".
+    """
+    now = datetime.fromtimestamp(time.time())
+    return now.strftime("%Y-%m-%d-%H-%M-%S-%f")
+
+
 def run(website_name):
     global desktop_path
     driver = webdriver.Chrome(executable_path=chromedriver_path)
     # https://nyctmc.org/google_popup.php?cid=975
     driver.get(website_name)
-    strTime = str(time.time())
+    strTime = get_current_time()
     image_folder = os.path.join(vision_mater_path, strTime)
     if not os.path.isdir(image_folder):
         os.mkdir(image_folder)
