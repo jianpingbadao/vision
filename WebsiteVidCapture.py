@@ -8,13 +8,19 @@ import os
 import sys
 
 
+desktop_path = os.path.expanduser("~/Desktop/")
+chromedriver_path = os.path.join(desktop_path, "chromedriver")
+vision_mater_path = os.path.join(desktop_path, "vision-master")
+
 def run(website_name):
-    driver = webdriver.Chrome(executable_path='~/Desktop/chromedriver')
+    global desktop_path
+    driver = webdriver.Chrome(executable_path=chromedriver_path)
     # https://nyctmc.org/google_popup.php?cid=975
     driver.get(website_name)
     strTime = str(time.time())
-    image_folder = '~/Desktop/vision-master/' + strTime
-    os.mkdir(image_folder)
+    image_folder = os.path.join(vision_mater_path, strTime)
+    if not os.path.isdir(image_folder):
+        os.mkdir(image_folder)
     os.chdir(image_folder)
 
     # take multiple screenshots
@@ -56,6 +62,7 @@ arg1 = sys.argv[1]
 
 while True:
     strTime = run(arg1)
-    os.chdir('~/Desktop/vision-master/' + strTime)
-    tup = execute('~/Desktop/vision-master/' + strTime, "video.avi", "result", 2)
+    image_folder = os.path.join(vision_mater_path, strTime)
+    os.chdir(image_folder)
+    tup = execute(image_folder, "video.avi", "result", 2)
     print("up: " + str(tup[0]) + " down: " + str(tup[-1]))
