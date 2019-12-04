@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+for var in "$@"
+
+do
+	echo "analyzing $var"
+	python WebsiteVidCapture.py "$var" &
+done
