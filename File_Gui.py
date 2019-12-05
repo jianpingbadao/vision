@@ -63,7 +63,7 @@ class Root(Tk):
         self.reset_button.grid(row = 11, column = 2)
 
         # Process
-        self.process_button = Button(self, command=self.process, text="Process", state = NORMAL)
+        self.process_button = Button(self, command=self.process, text="Process", state = DISABLED)
         self.process_button.grid(row = 13, column = 2)
 
         # Assigns num of lanes for data point entries
@@ -122,7 +122,9 @@ class Root(Tk):
        global next_clicked
        next_clicked = True
        print(next_clicked) # debug
-    
+       
+       # self.imageCanvas.after(500, self.imageCanvas.delete, self.canvas_id_one) # Delete after 1 second
+
        x_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0]
        y_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1]
        x_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2]
@@ -137,7 +139,7 @@ class Root(Tk):
 
        print(x_1) # debug
 
-       self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+       self.imageCanvas.create_line(x_1, y_1, x_2, y_2, fill = "green")
        self.cur_line +=1
 
        if self.cur_line == self.num_of_lines_per_group:
@@ -188,9 +190,17 @@ class Root(Tk):
         '''
         print(self.num_of_groups)
         print(self.num_of_lines_per_group)
-        print(self.filename)
+        # print(self.filename)
+        # self.next_entries.append(next_entries_cur_group)
+        self.group_num_L = [] # group num list
+        self.opt_L = [] # opt list
+        self.Speed_num = [] # Speed num list
+        self.Count_num = [] # Count num list
+        self.Count_label_L = [] # Count label list
+        self.Speed_label_L = [] # Speed label list
 
-        self.group_label = Label(self, text = "Lane Data").grid(row = 0, column = 6)
+        self.group_label = Label(self, text = "Lane Data")
+        self.group_label.grid(row = 0, column = 6)
         # self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
         # self.entry_lane.grid(row = 1, column = 4)
 
@@ -205,22 +215,36 @@ class Root(Tk):
         start_col = 6
         for group in range(self.num_of_groups):
             str_num = '# ' + str(group + 1)
-            self.group_num = Label(self, text = str_num).grid(row = start_row, column = start_col)
+            group_num = Label(self, text = str_num)
+            group_num.grid(row = start_row, column = start_col)
             
             self.variable = StringVar()
             self.variable.set(option_list[0])
 
-            self.opt = OptionMenu(self, self.variable, *option_list).grid(row = start_row, column = start_col +1)
+            opt = OptionMenu(self, self.variable, *option_list)
+            opt.grid(row = start_row, column = start_col +1)
             # self.opt.config(width=90, font=('Helvetica', 12))
             start_row +=1
-            self.Count_label = Label(self, text = "Count").grid(row = start_row, column = start_col)
-            self.Speed_label = Label(self, text = "Speed mph").grid(row = start_row, column = start_col +1)
+            Count_label = Label(self, text = "Count")
+            Count_label.grid(row = start_row, column = start_col)
+            Speed_label = Label(self, text = "Speed mph")
+            Speed_label.grid(row = start_row, column = start_col +1)
             start_row +=1
 
             # Counts that need to be updated with processing code
-            self.Count_num = Label(self, textvariable=self.count_strvar).grid(row = start_row, column = start_col)
-            self.Speed_num = Label(self, textvariable=self.speed_strvar).grid(row = start_row, column = start_col +1)
+            Count_num = Label(self, textvariable=self.count_strvar)
+            Count_num.grid(row = start_row, column = start_col)
+            Speed_num = Label(self, textvariable=self.speed_strvar)
+            Speed_num.grid(row = start_row, column = start_col +1)
             start_row +=1
+
+            # self.next_entries.append(next_entries_cur_group)
+            self.group_num_L.append(group_num)
+            self.opt_L.append(opt)
+            self.Speed_num.append(Speed_num)
+            self.Count_num.append(Count_num)
+            self.Count_label_L.append(Count_label)
+            self.Speed_label_L.append(Speed_label)
             
 
 
@@ -235,36 +259,44 @@ class Root(Tk):
         global i
         global j
         self.filename = ' '
+        self.filename_strvar.set(' ') # debug should set display to empty
+        print(self.filename_strvar.get())
         self.button.config(state = NORMAL)
         self.enter_button.config(state = NORMAL)
 
         # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
+            # self.next_entries.append(next_entries_cur_group)
+            self.group_num_L[n].grid_forget()
+            self.opt_L[n].grid_forget()
+            self.Speed_num[n].grid_forget()
+            self.Count_num[n].grid_forget()
+            self.Count_label_L[n].grid_forget()
+            self.Speed_label_L[n].grid_forget()
+            
             for m in range(self.num_of_lines_per_group):
                 # self.next_entries[n][m].destroy()
                 # self.line_entries[n][m].destroy()
                 self.next_entries[n][m].grid_forget()
                 self.line_entries[n][m].grid_remove()
+        # print('a')
         print(self.num_of_groups)
         print(self.num_of_lines_per_group)
-        # self.entry_lane.grid_remove()
-        # self.entry_lane.delete(0, None)
-        self.entry_lane.destroy()
-        # self.filename_strvar.set(self.filename) # Display filename
+        
+        self.group_label.grid_forget()  # delete group label 
+
         self.submitButton.config(state = DISABLED)
         # self.entry_lane.config(state = NORMAL)
-        # self.num_of_groups = 0
         self.num_of_groups = 0
+        # self.num_of_groups.set(' ')
         print(self.num_of_groups)
-        # self.entry_lane.update()
-        # self.entry_lane.config(state = DISABLED)
-        self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
-        self.entry_lane.grid(row = 1, column = 4)
+        
         i = 0
         j = 0
         #self.imageCanvas.bind('<1>', self.canvasClickCallBack)
         self.imageCanvas.delete("all")
         self.imageCanvas.bind('<1>', self.canvasClickCallBack)
+        self.process_button.config(state = DISABLED)
 
 
 
@@ -327,6 +359,7 @@ class Root(Tk):
         Signal to end / freeze canvas to stop allowing button clicks
         """
         self.imageCanvas.unbind('<1>') # unbind canvas
+        self.process_button.config(state = NORMAL)
 
 
     def canvasClickCallBack(self, event):
@@ -368,8 +401,10 @@ class Root(Tk):
             x_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2])
             y_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3])
                             
-            canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-            self.imageCanvas.after(1000, self.imageCanvas.delete, canvas_id_one) # Delete after 1 second
+            self.canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
+            # if(self.newclicked == True)
+            self.imageCanvas.after(3000, self.imageCanvas.delete, self.canvas_id_one) # Delete after 1 second
+            
             # if next_clicked == True:
                 # canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
                 # next_clicked = False 
