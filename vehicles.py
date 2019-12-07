@@ -53,6 +53,9 @@ class Car:
         return self.done
 
     def going_UP(self, mid_line):
+        if self.dir:
+            return False
+
         if len(self.tracks) >= 2:
             if self.state == '0':
                 if self.tracks[-1][1] < mid_end and self.tracks[-2][1] >= mid_end:
@@ -67,6 +70,9 @@ class Car:
             return False
 
     def going_DOWN(self, mid_line):
+        if self.dir:
+            return False
+
         if len(self.tracks) >= 2:
             if self.state == '0':
                 if self.tracks[-1][1] > mid_start and self.tracks[-2][1] <= mid_start:
