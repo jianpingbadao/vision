@@ -97,13 +97,12 @@ def execute(directory, file_n, result_n, up_dwn):
 
     # Kernals
     kernalOp = np.ones((3, 3), np.uint8)
-    kernalOp2 = np.ones((5, 5), np.uint8)
-    kernalCl = np.ones((11, 11), np.uint)
+    kernalCl = np.ones((11, 11), np.uint8)
 
     font = cv2.FONT_HERSHEY_SIMPLEX
     cars = []
     max_p_age = 5
-    pid = 1
+    car_id = 1
     speed_up = 0.0
     speed_down = 0.0
     distance = .5
@@ -112,34 +111,35 @@ def execute(directory, file_n, result_n, up_dwn):
     contents = []
 
     while cap.isOpened():
-        ret, frame = cap.read()
+        read_success, frame = cap.read()
         for i in cars:
             i.age_one()
         fgmask = fgbg.apply(frame)
-        fgmask2 = fgbg.apply(frame)
 
-        if ret == True:
+        if read_success == True:
 
             # Binarization
-            ret, imBin = cv2.threshold(fgmask, 200, 255, cv2.THRESH_BINARY)
-            ret, imBin2 = cv2.threshold(fgmask2, 200, 255, cv2.THRESH_BINARY)
+            _, imBin = cv2.threshold(fgmask, 200, 255, cv2.THRESH_BINARY)
+
             # Opening i.e First Erode the dilate
             mask = cv2.morphologyEx(imBin, cv2.MORPH_OPEN, kernalOp)
-            mask2 = cv2.morphologyEx(imBin2, cv2.MORPH_CLOSE, kernalOp)
 
             # Closing i.e First Dilate then Erode
             mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernalCl)
-            mask2 = cv2.morphologyEx(mask2, cv2.MORPH_CLOSE, kernalCl)
 
             # Find Contours
             # Creates rectangles around each vehicle
             countours0, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
             for cnt in countours0:
                 area = cv2.contourArea(cnt)
-                print(area)
+                print(f"Detected area size: {area}")
                 if area > areaTH:
                     ####Tracking######
                     m = cv2.moments(cnt)
+                    if m['m00'] == 0:
+                        # generally this should not happen since the area is already larger than threshold.
+                        # Just in case of a bad threshold
+                        continue
                     cx = int(m['m10'] / m['m00'])  # Centroid, https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
                     cy = int(m['m01'] / m['m00'])
                     x, y, w, h = cv2.boundingRect(cnt)
@@ -185,9 +185,9 @@ def execute(directory, file_n, result_n, up_dwn):
                                 del i
 
                         if new == True:  # If nothing is detected,create new
-                            p = vehicles.Car(pid, cx, cy, max_p_age)
+                            p = vehicles.Car(car_id, cx, cy, max_p_age)
                             cars.append(p)
-                            pid += 1
+                            car_id += 1
                             t2 = time.time()
 
                     cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)
