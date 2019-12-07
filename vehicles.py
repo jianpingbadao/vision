@@ -56,7 +56,7 @@ class Car:
         if len(self.tracks) >= 2:
             if self.state == '0':
                 if self.tracks[-1][1] < mid_end and self.tracks[-2][1] >= mid_end:
-                    state = '1'
+                    self.state = '1'
                     self.dir = 'up'
                     return True
                 else:
@@ -70,7 +70,7 @@ class Car:
         if len(self.tracks) >= 2:
             if self.state == '0':
                 if self.tracks[-1][1] > mid_start and self.tracks[-2][1] <= mid_start:
-                    start = '1'
+                    self.state = '1'
                     self.dir = 'down'
                     return True
                 else:
