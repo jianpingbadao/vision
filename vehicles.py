@@ -69,7 +69,11 @@ class Car:
 
         if len(self.tracks) >= 2:
             if self.state == '0':
-                if self.tracks[-1][1] < mid_end and self.tracks[-2][1] >= mid_end:
+                # TODO: This probably is not suitable for low frame rate video
+                # consider to change to directly compare the consecutive two coordinates
+                # i.e.
+                # if self.tracks[-1][1] < self.tracks[-2][1]:
+                if self.tracks[-1][1] < mid_line and self.tracks[-2][1] >= mid_line:
                     self.state = '1'
                     self.dir = 'up'
                     return True
@@ -86,7 +90,9 @@ class Car:
 
         if len(self.tracks) >= 2:
             if self.state == '0':
-                if self.tracks[-1][1] > mid_start and self.tracks[-2][1] <= mid_start:
+                # TODO: The same change goes here as with going_UP()
+                if self.tracks[-1][1] > self.tracks[-2][1]:
+                # if self.tracks[-1][1] > mid_line and self.tracks[-2][1] <= mid_line:
                     self.state = '1'
                     self.dir = 'down'
                     return True
