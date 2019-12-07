@@ -13,8 +13,8 @@ class Car:
         self.R = randint(0, 255)
         self.G = randint(0, 255)
         self.B = randint(0, 255)
-        self.done = False
-        self.state = '0'
+        self.done = False  # it is not used yet; can be used in going_UP()/going_DONW()
+        self.state = '0'  # '0': not count yet; '1': already count; TODO: it is redundent with self.dir
         self.age = 0
         self.max_age = max_age
         self.dir = None
@@ -41,6 +41,17 @@ class Car:
         return self.y
 
     def updateCoords(self, xn, yn):
+        """
+        update the coordinates of the vehicle, and add the previous coordinates
+        into its tracks
+
+        Parameters
+        ----------
+        xn : int
+            The current x location of the vehicle
+        yn : int
+            The current y location of the vehicle
+        """
         self.age = 0
         self.tracks.append([self.x, self.y])
         self.x = xn
