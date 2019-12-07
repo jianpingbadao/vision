@@ -52,7 +52,7 @@ class Car:
     def timedOut(self):
         return self.done
 
-    def going_UP(self, mid_start, mid_end):
+    def going_UP(self, mid_line):
         if len(self.tracks) >= 2:
             if self.state == '0':
                 if self.tracks[-1][1] < mid_end and self.tracks[-2][1] >= mid_end:
@@ -66,7 +66,7 @@ class Car:
         else:
             return False
 
-    def going_DOWN(self, mid_start, mid_end):
+    def going_DOWN(self, mid_line):
         if len(self.tracks) >= 2:
             if self.state == '0':
                 if self.tracks[-1][1] > mid_start and self.tracks[-2][1] <= mid_start:

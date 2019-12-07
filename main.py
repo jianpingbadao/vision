@@ -155,7 +155,7 @@ def execute(directory, file_n, result_n, up_dwn):
                                 new = False
                                 i.updateCoords(cx, cy)
 
-                                if i.going_UP(line_down, line_up) == True:
+                                if i.going_UP(line_up) == True:
                                     cnt_up += 1
                                     content = "ID: " + str(i.getId()) + ' crossed going up at ' + time.strftime("%c")
                                     contents.append(content)
@@ -164,7 +164,7 @@ def execute(directory, file_n, result_n, up_dwn):
                                     if distance / abs(t1 - t2) * 10 < 80:
                                         speed_up = distance / abs(t1 - t2) * 10
 
-                                elif i.going_DOWN(line_down, line_up) == True:
+                                elif i.going_DOWN(line_down) == True:
                                     cnt_down += 1
                                     content = "ID: " + str(i.getId()) + ' crossed going down at ' + time.strftime("%c")
                                     contents.append(content)
