@@ -7,7 +7,7 @@ import os
 
 def execute(directory, file_n, result_n, up_dwn):
     """ 
-        purpose: execute(file_n, result_n, up_dwn) counts cars going up
+        purpose: it counts cars going up
         and down based on parameters. When it is run it analyzes the video,
         and produces a txt file in the end showing what times the cars 
         passed the intersection. It also includes information about the total
@@ -15,13 +15,19 @@ def execute(directory, file_n, result_n, up_dwn):
 
         parameters
         ----------
-        file_n: type = String, optimal: must be a video type that cv2.VideoCaputure accepts
-        result_n: type = String, optimal: file should not exist, otherwise it overwrites the file
-        up_dwn: type = Integer, optimal: 0 = count cars going down, 1 = count cars going
-        up, 2 = count cars going both up and down
-        ----------
+        directory: string,
+            The directory that contains the video and the result
 
-        returns:
+        file_n: type = String, optimal: must be a video type that cv2.VideoCaputure accepts
+
+        result_n: type = String, optimal: file should not exist, otherwise it overwrites the file
+
+        up_dwn: type = Integer, optimal: 0 = count cars going down, 1 = count cars going
+
+        up, 2 = count cars going both up and down
+
+        returns
+        ----------
         none
     """
     os.chdir(directory)
@@ -40,7 +46,8 @@ def execute(directory, file_n, result_n, up_dwn):
     w = cap.get(3)
     h = cap.get(4)
     frameArea = h * w
-    areaTH = frameArea / 400
+    areaTH = frameArea / 400  # the area threshold (minimum) for each single vehicle in the video;
+    # TODO: should be adjustable for different camera
 
     # Lines
     # Create Lines for video
@@ -133,14 +140,17 @@ def execute(directory, file_n, result_n, up_dwn):
                 if area > areaTH:
                     ####Tracking######
                     m = cv2.moments(cnt)
-                    cx = int(m['m10'] / m['m00'])
+                    cx = int(m['m10'] / m['m00'])  # Centroid, https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
                     cy = int(m['m01'] / m['m00'])
                     x, y, w, h = cv2.boundingRect(cnt)
 
                     new = True
-                    # detect cars in between up_limit down_limit
+                    # detect cars in between up_limit and down_limit
                     if cy in range(up_limit, down_limit):
                         for i in cars:
+                            # TODO: this may not hold for all cases
+                            # e.g. if the frame rate is too low,
+                            # then the same car in consecutive frames will be far away
                             if abs(x - i.getX()) <= w and abs(y - i.getY()) <= h:
                                 new = False
                                 i.updateCoords(cx, cy)
@@ -224,7 +234,9 @@ def execute(directory, file_n, result_n, up_dwn):
                 break
 
         else:
+            # video/stream open failed
             break
+
     with open(result_name, 'w') as f:
         for item in contents:
             f.write(item + '\n')
