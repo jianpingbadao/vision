@@ -45,6 +45,15 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
 
     cap = cv2.VideoCapture(file_name)
 
+    # Find OpenCV version
+    major_ver, minor_ver, subminor_ver = (cv2.__version__).split('.')
+    if int(major_ver) < 3:
+        fps = cap.get(cv2.cv.CV_CAP_PROP_FPS)
+        print("Frames per second using video.get(cv2.cv.CV_CAP_PROP_FPS): {0}".format(fps))
+    else :
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        print("Frames per second using video.get(cv2.CAP_PROP_FPS) : {0}".format(fps))
+
     # Get width and height of video
     w = cap.get(3)
     h = cap.get(4)
@@ -115,6 +124,8 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
 
     while cap.isOpened():
         read_success, frame = cap.read()
+        last_frame_time = time.time()
+
         for i in cars:
             i.age_one()
         fgmask = fgbg.apply(frame)
@@ -236,6 +247,10 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
             if cv2.waitKey(1) & 0xff == ord('q'):
                 break
 
+            cur_time = time.time()
+            while cur_time - last_frame_time < 1 / fps:
+                time.sleep(0.001)
+                cur_time = time.time()
         else:
             # video/stream open failed
             break
