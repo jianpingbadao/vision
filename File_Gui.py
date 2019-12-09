@@ -179,9 +179,9 @@ class Root(Tk):
 
         # while True:
         # Video 
-        _, self.frame = cap.read()
+        _, frame = cap.read()
         # cv2.imshow('frame', self.frame)
-        frame = cv2.flip(self.frame, 1)
+        # frame = cv2.flip(self.frame, 1)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
 
@@ -634,9 +634,9 @@ class Root(Tk):
 
         # while True:
         # Video 
-        _, self.frame = cap.read()
+        _, frame = cap.read()
         # cv2.imshow('frame', self.frame)
-        frame = cv2.flip(self.frame, 1)
+        # frame = cv2.flip(self.frame, 1)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
 
