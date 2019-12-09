@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 
-for var in "$@"
+#This is an array in which you populate the URL's of the Websites you want to
+#capture
+
+websites=("https://nyctmc.org/google_popup.php?cid=483"
+"https://nyctmc.org/google_popup.php?cid=543" 
+"https://nyctmc.org/google_popup.php?cid=716")
+
+for site in ${websites[@]};
 
 do
-	echo "analyzing $var"
-	python WebsiteVidCapture.py "$var" &
+	echo "analyzing $site"
+	python WebsiteVidCapture.py "$site" &
 done
