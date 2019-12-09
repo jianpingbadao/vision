@@ -16,8 +16,16 @@ from PIL import Image, ImageTk
 from pynput.mouse import Controller
 
 import os
+from selenium import webdriver
+from main import execute
+import time
+import sys
+from datetime import datetime
 
 
+desktop_path = os.path.expanduser("~/Desktop/")
+chromedriver_path = os.path.join(desktop_path, "chromedriver")
+vision_mater_path = os.path.join(desktop_path, "vision-master")
 
 val = False
 coord = None
@@ -108,6 +116,149 @@ class Root(Tk):
         self.submitButton.config(state = NORMAL)
         self.entry_lane.config(state = NORMAL)
         print(self.filename_strvar.get()) # debug Input UrL
+        self.get_pic()
+
+    
+    def get_pic(self):
+        global desktop_path
+        website_name = self.filename_strvar.get()
+        driver = webdriver.Chrome(executable_path=chromedriver_path)
+        # https://nyctmc.org/google_popup.php?cid=975
+        driver.get(website_name)
+        strTime = self.get_current_time()
+        image_folder = os.path.join(vision_mater_path, strTime)
+        image_folder = os.path.join(vision_mater_path, strTime)
+        if not os.path.isdir(image_folder):
+            os.mkdir(image_folder)
+        os.chdir(image_folder)
+
+        # take multiple screenshots
+        # figure out how many duplicates you need
+        time.sleep(1)
+        for x in range(5):
+            time.sleep(1)
+            driver.save_screenshot(str(time.time()) + ".png")
+
+        driver.close()
+
+        video_name = 'video.avi'
+
+        images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
+        images.sort()
+
+        # get the border from the image
+        if not images:
+            print(f"Error: NO screenshot has been captured from {website_name}")
+            sys.exit(0)
+
+        left, top, right, down = self.get_image_border(images[0])
+        if left >= right or top >= down:
+            print(f"Error: Incorrect border of the camera has been detected from image: {images[0]} of URL {website_name}")
+            print(f"left: {left}, top: {top}, right: {right}, down: {down}")
+            sys.exit(0)
+
+        width = right - left
+        height = down - top
+        video = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'XVID'), 1, (width, height))
+
+        for image in images:
+            im = Image.open(image)
+            crop = im.crop((left, top, right, down))
+            crop.save(image)
+            video.write(cv2.imread(os.path.join(image_folder, image)))
+
+        cv2.destroyAllWindows()
+        video.release()
+        # for image in images:
+        #     os.remove(image)
+        self.display()
+        return strTime
+
+    def display(self):
+        self.filename = "video.avi"
+        self.filename_strvar.set(self.filename) # Display filename
+        # self.filename_strvar = Entry(self, text = self.filename)
+        # self.filename_strvar.grid(row = 13, column = 0)
+        # self.filename_strvar.config(state = DISABLED)
+
+
+        cap = cv2.VideoCapture(self.filename) # Play video of file
+
+        # while True:
+        # Video 
+        _, self.frame = cap.read()
+        # cv2.imshow('frame', self.frame)
+        frame = cv2.flip(self.frame, 1)
+        cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
+        img = Image.fromarray(cv2image)
+
+        copy_of_image = img.copy() 
+        img = copy_of_image.resize((vid_x, vid_y)) # size of video
+        imgtk = ImageTk.PhotoImage(image=img)
+
+        self.video_image_tk = imgtk # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
+        self.imageCanvas.create_image(0, 0, anchor=NW, image=imgtk)
+        ##### Draw lines
+        # self.imageCanvas.create_line()
+
+
+        self.video_file_loaded = True
+
+        # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.submitButtonClick)
+        # self.newbut.grid(row = 0, column = 0)
+        # self.lmain.after(10, self.fileDialog) 
+
+        # if cv2.waitKey(1) & 0xFF == ord('q'):
+        #     break
+        cap.release()
+        cv2.destroyAllWindows()
+
+    def get_current_time(self):
+        """
+        Get current time in an easy to read format
+
+        Returns
+        -------
+        current time, type: String
+        Current time in format, "YYYY-MM-DD-HH-MM-SS-Microsec".
+        """
+        now = datetime.fromtimestamp(time.time())
+        return now.strftime("%Y-%m-%d-%H-%M-%S-%f")
+
+
+    def get_image_border(self, image_path):
+        """
+        Get the border of the camera from the image so as to crop the image.
+    
+        Parameters
+        ----------
+        image_path : String
+        The absolute path of the image to be dealt with
+    
+        Returns
+        -------
+        left, top, right, down
+            Two coordinates of the points, i.e., top left corner and bottom right cornor.
+        """
+        img = Image.open(image_path)
+        img_array = np.asarray(img)
+
+        height, width, _ = img_array.shape
+
+        left = width  # the minimum x with non-white
+        top = height  # the minimum y with non-white
+        right = 0  # the largest x with non-white
+        down = 0  # the largest y with non-white
+
+        for row in range(height):
+            for col in range(width):
+                if img_array[row][col][0] != 255:
+                    top = min(row, top)
+                    left = min(col, left)
+                    down = max(row, down)
+                    right = max(col, right)
+
+        return left, top, right, down
 
 
     def next_entry(self):
@@ -184,7 +335,6 @@ class Root(Tk):
         on original video size.
         Alternatively could probably set video to be processed to specific size
         as is done in this file for the screen shot.
-
         Probably want to disable this function/button until all data is entered
         to avoid errors.
         '''
@@ -543,6 +693,7 @@ class Root(Tk):
     #def printf(self):
      #   print(self.fileDialog())
 
+# arg1 = sys.argv[1]
 
 if __name__ == '__main__':
     root = Root()
