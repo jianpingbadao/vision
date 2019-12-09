@@ -14,7 +14,6 @@ from tkinter import ttk
 import cv2
 import numpy as np
 from PIL import Image, ImageTk
-from pynput.mouse import Controller
 from selenium import webdriver
 
 desktop_path = os.path.expanduser("~/Desktop/")
@@ -77,7 +76,6 @@ class Root(Tk):
         self.entry_lane = Entry(self, textvariable=self.num_of_groups, state=DISABLED)
         self.entry_lane.grid(row=1, column=4)
 
-        self.mouse = Controller()
         global coord
         coord = ''
         self.pt_1 = ttk.Label(self, text=coord)
@@ -583,7 +581,7 @@ class Root(Tk):
     # self.vid_button = ttk.Button(self)
     # self.vid_button.config(width = x, height = y)
     # self.vid_button.grid(row = 0, column = 0)
-    # print("x: {0}".format(self.mouse.position))
+
 
     def create_file_dialog_button(self):
         # Create Button to open file directory
