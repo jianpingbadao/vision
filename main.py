@@ -5,7 +5,7 @@ import time
 import os
 
 
-def execute(directory, file_n, result_n, up_dwn):
+def execute(directory, file_n, result_n, up_dwn, lines=None):
     """ 
         purpose: it counts cars going up
         and down based on parameters. When it is run it analyzes the video,
@@ -22,9 +22,12 @@ def execute(directory, file_n, result_n, up_dwn):
 
         result_n: type = String, optimal: file should not exist, otherwise it overwrites the file
 
-        up_dwn: type = Integer, optimal: 0 = count cars going down, 1 = count cars going
+        up_dwn: type = Integer, optimal: 0 = count cars going down, 1 = count cars going up, 2 = count cars going both up and down
 
-        up, 2 = count cars going both up and down
+        lines : dictionary,
+                The lines that are used to determine the moving direction of the vehicles in the video.
+                Key is the moving direction, i.e., up or down;
+                Values are three lines, and each line consists of 4 numbers, i.e., x_left, y_left, x_right, y_right
 
         returns
         ----------
@@ -150,12 +153,12 @@ def execute(directory, file_n, result_n, up_dwn):
                         for i in cars:
                             # TODO: this may not hold for all cases
                             # e.g. if the frame rate is too low,
-                            # then the same car in consecutive frames will be far away
+                            # then the same car in consecutive frames will be far away from each other
                             if abs(x - i.getX()) <= w and abs(y - i.getY()) <= h:
                                 new = False
                                 i.updateCoords(cx, cy)
 
-                                if i.going_UP(line_up) == True:
+                                if i.going_UP(line_up):
                                     cnt_up += 1
                                     content = "ID: " + str(i.getId()) + ' crossed going up at ' + time.strftime("%c")
                                     contents.append(content)
@@ -164,7 +167,7 @@ def execute(directory, file_n, result_n, up_dwn):
                                     if distance / abs(t1 - t2) * 10 < 80:
                                         speed_up = distance / abs(t1 - t2) * 10
 
-                                elif i.going_DOWN(line_down) == True:
+                                elif i.going_DOWN(line_down):
                                     cnt_down += 1
                                     content = "ID: " + str(i.getId()) + ' crossed going down at ' + time.strftime("%c")
                                     contents.append(content)
@@ -184,7 +187,7 @@ def execute(directory, file_n, result_n, up_dwn):
                                 cars.pop(index)
                                 del i
 
-                        if new == True:  # If nothing is detected,create new
+                        if new:  # If nothing is detected, create new
                             p = vehicles.Car(car_id, cx, cy, max_p_age)
                             cars.append(p)
                             car_id += 1
@@ -248,4 +251,3 @@ def execute(directory, file_n, result_n, up_dwn):
     cv2.destroyAllWindows()
 
     return cnt_up, cnt_down
-
