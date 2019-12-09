@@ -620,6 +620,8 @@ class Root(Tk):
         self.submitButton.config(state=NORMAL)
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File")  # Read File
 
+        self.update()  # fix the freeze issue on Mac in the File Selection popup
+
         self.enter_button.config(state=DISABLED)  # Disable enter button
 
         if not self.check_video_file(self.filename):
