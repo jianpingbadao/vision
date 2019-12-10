@@ -4,8 +4,7 @@
 #capture
 
 websites=("https://nyctmc.org/google_popup.php?cid=483"
-"https://nyctmc.org/google_popup.php?cid=543" 
-"https://nyctmc.org/google_popup.php?cid=716")
+"https://nyctmc.org/google_popup.php?cid=543")
 
 for site in ${websites[@]};
 

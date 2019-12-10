@@ -21,7 +21,7 @@ A simple demo to show how the `VideoCapture()` works with the webcam:
 2. Install required packages:
     > `python install -r requirements.txt`
 3. You need to follow this step only if you want to try out the functionality that captures and processes video from a given URL of a traffic camera.
-   - Install Chrome Web Browser (Other web browsers could also work. But corresponding changes are needed in the code.), and find out its version by going to `Menu` on the top right -> `Help` -> `About`.
+   - Install Chrome Web Browser (Other web browsers could also work. But corresponding changes are needed in the code.), and find out its version by going to `Menu` on the top right -> `Help` -> `About`. https://www.howtogeek.com/299243/which-version-of-chrome-do-i-have/
    - Find and download the matching [Chrome driver](https://sites.google.com/a/chromium.org/chromedriver/). I believe as long as the major versions (the number before the first `.` in version number) of the driver and browser are the same, it should work fine.
    - Unzip the Chrome Driver and put it onto the `Desktop` (Of course you can put it wherever you want, but then you need to make some changes in the coding so that the program knows where to find the Driver.)
 
@@ -34,4 +34,9 @@ A simple demo to show how the `VideoCapture()` works with the webcam:
 
 2. To launch with GUI, follow
    
+3. To process multiple video streams from URL, go to the terminal and edit runMany
+
+   You can edit on terminal by typing [nano runMany] and inside you will see an array in which you can populate with multiple URL's as a string. Save the file and run chmod +x runMany. From terminal run the command [./runMany]
+
+4. To process a sample video, run command [python original.py]
    **TO Be Continued**
