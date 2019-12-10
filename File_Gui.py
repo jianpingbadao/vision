@@ -20,7 +20,6 @@ desktop_path = os.path.expanduser("~/Desktop/")
 chromedriver_path = os.path.join(desktop_path, "chromedriver")
 vision_mater_path = os.path.join(desktop_path, "vision-master")
 
-coord = None
 vid_x = 500  # Width of video
 vid_y = 300  # Height of video
 i = 0  # iterator for num of groups, used for next button
@@ -76,19 +75,12 @@ class Root(Tk):
         self.entry_lane = Entry(self, textvariable=self.num_of_groups_strvar, state=DISABLED)
         self.entry_lane.grid(row=1, column=4)
 
-        global coord
-        coord = ''
-        self.pt_1 = ttk.Label(self, text=coord)
-        self.pt_1.grid(row=4, column=6)
-
         """Create Submit Button"""
         # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
         self.submitButton = Button(self, command=self.submitButtonClick, text="Submit", state=DISABLED)
         self.submitButton.grid(row=1, column=5)
 
         # self.next_entry(index)
-        global next_clicked
-        next_clicked = False
 
 
     # URL text Handler 
@@ -250,9 +242,6 @@ class Root(Tk):
         global y_1
         global x_2
         global y_2
-
-        global next_clicked
-        next_clicked = True
 
         x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
 
@@ -490,8 +479,7 @@ class Root(Tk):
         global y_1
         global x_2
         global y_2
-        global next_clicked
-        print(next_clicked)
+
         # line_one = False
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
@@ -519,10 +507,6 @@ class Root(Tk):
             # if(self.newclicked == True)
             self.imageCanvas.after(3000, self.imageCanvas.delete, self.canvas_id_one)  # Delete after 1 second
 
-            # if next_clicked == True:
-            # canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-            # next_clicked = False
-
             # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
             # self.imageCanvas.create_line(0,0,40,40)
             if self.cur_line == self.num_of_lines_per_group:
@@ -533,7 +517,6 @@ class Root(Tk):
     def submitButtonClick(self):
         # global i
         # global j
-        global next_clicked
         """ handle button click event and output text from entry area"""
         input = self.entry_lane.get()
         # print(input)
@@ -542,7 +525,6 @@ class Root(Tk):
         self.submitButton.config(state=DISABLED)
         self.next_entries[0][0].config(state=NORMAL)  # enable first next button
         self.line_entries[0][0].config(state=NORMAL)  # enable first text entry
-        next_clicked = True
         self.entry_lane.config(state=DISABLED)
         # self.imageCanvas.bind('<1>')
 
