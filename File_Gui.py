@@ -206,12 +206,12 @@ class Root(Tk):
     def get_image_border(self, image_path):
         """
         Get the border of the camera from the image so as to crop the image.
-    
+
         Parameters
         ----------
         image_path : String
         The absolute path of the image to be dealt with
-    
+
         Returns
         -------
         left, top, right, down
@@ -240,10 +240,6 @@ class Root(Tk):
     def next_entry(self):
         global i
         global j
-        global x_1
-        global y_1
-        global x_2
-        global y_2
 
         x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
 
@@ -258,10 +254,7 @@ class Root(Tk):
         self.next_entries[i][j].config(state=DISABLED)
         self.line_entries[i][j].config(state=DISABLED)
         if i <= self.num_of_groups - 1:
-            # self.next_entries[i][j].config(state = NORMAL)
             if i == self.num_of_groups - 1 and j == self.num_of_lines_per_group - 1:
-                print("end")
-                # end = True
                 self.end()
             else:
                 j += 1
@@ -271,12 +264,6 @@ class Root(Tk):
                 self.next_entries[i][j].config(state=NORMAL)
                 self.line_entries[i][j].config(state=NORMAL)
 
-    ######
-    # def next_entry(self):
-    #  for btn in self.next_entries_cur_group:
-    #     if str(btn['state']) == 'disabled':
-    #  btn.configure(state = 'normal')
-    # self.next_entries_cur_group[index].configure(state = 'disabled')
 
     # Process
     def process(self):
@@ -385,9 +372,6 @@ class Root(Tk):
                 # self.line_entries[n][m].destroy()
                 self.next_entries[n][m].grid_forget()
                 self.line_entries[n][m].grid_remove()
-        # print('a')
-        # print(self.num_of_groups)
-        # print(self.num_of_lines_per_group)
 
         try:
             self.group_label.grid_forget()  # delete group label
@@ -398,8 +382,6 @@ class Root(Tk):
         # self.entry_lane.config(state = NORMAL)
         self.num_of_groups_strvar.set('')
         self.num_of_groups = 0
-        # self.num_of_groups.set(' ')
-        # print(self.num_of_groups)
 
         i = 0
         j = 0
@@ -418,9 +400,6 @@ class Root(Tk):
         self.num_of_clicks_per_line = 2
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in
                               range(self.num_of_groups)]
-
-        # self.button_next = Button(self, text = "next", command = self.next_entry)
-        # self.button_next.grid(row = 3, column = 2)
 
         self.line_entries = []  # list of list of text widgets
         self.next_entries = []  # list of list of buttons
@@ -451,18 +430,16 @@ class Root(Tk):
             self.next_entries.append(next_entries_cur_group)
             self.line_entries.append(line_entries_cur_group)
 
-        # self.next_entries[0][1].config(state = NORMAL) # enable disable buttons
-
         if self.prev_lanes > self.num_of_groups:  # check to see if the new amount of lanes is less than the previous
             # for ln in range(self.prev_lanes - self.num_of_groups):
             for line_entry in self.grid_slaves():
                 if int(line_entry.grid_info()["row"]) > self.num_of_groups:
                     line_entry.grid_forget()
-                # line_entry.grid_forget(row = self.num_of_groups + ln, column = start_col)
         self.cur_group = 0
         self.cur_line = 0
         self.cur_click = 0
         self.prev_lanes = num_lanes
+
 
     def end(self):
         """a
@@ -479,12 +456,7 @@ class Root(Tk):
         event : obj
             The click event.
         """
-        global x_1
-        global y_1
-        global x_2
-        global y_2
 
-        # line_one = False
         print(f"{event.x}, {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
 
@@ -499,20 +471,11 @@ class Root(Tk):
 
         if self.cur_click == self.num_of_clicks_per_line:
             self.cur_click = 0
-            # self.imageCanvas.create_line(_content)
-            print(self.entry_strvars[self.cur_group][self.cur_line].get().split(', '))
-            # print(self.entry_strvars[self.cur_group][self.cur_line].get()[15:18])
-            x_1 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0])
-            y_1 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1])
-            x_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2])
-            y_2 = int(self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3])
 
+            x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
             self.canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-            # if(self.newclicked == True)
             self.imageCanvas.after(3000, self.imageCanvas.delete, self.canvas_id_one)  # Delete after 1 second
 
-            # self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-            # self.imageCanvas.create_line(0,0,40,40)
             if self.cur_line == self.num_of_lines_per_group:
                 self.cur_line = 0
                 self.cur_group += 1
