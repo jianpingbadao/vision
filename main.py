@@ -70,26 +70,72 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
     areaTH = frameArea / 400  # the area threshold (minimum) for each single vehicle in the video;
     # TODO: should be adjustable for different camera
 
-    # Lines
-    # Create Lines for video
-    if file_name == "test.mov":
-        line_up = int(2.5 * (h / 5))
-        line_down = int(4 * (h / 5))
-    elif file_name == "test2.mov":
-        line_up = int(2.5 * (h / 5))
-        line_down = int(4 * (h / 5))
-    elif file_name == "test3.mov":
-        line_up = int(2.5 * (h / 5))
-        line_down = int(4 * (h / 5))
-    elif file_name == "surveillance.m4v":
-        line_up = int(2.5 * (h / 5))
-        line_down = int(3 * (h / 5))
-    else:
-        line_up = int(3.25 * (h / 5))
-        line_down = int(3 * (h / 5))
+    if lines:
+        line_downs = []
+        line_ups = []
+        for direction_and_line in lines:
+            all_lines = direction_and_line['lines']
+            if direction_and_line['direction'] == 'down':
+                line_downs.append(all_lines)
+            else:
+                line_ups.append(all_lines)
 
-    up_limit = int(2 * (h / 5))
-    down_limit = int(4.5 * (h / 5))
+        # TODO: For now just take the first one
+        if line_ups:
+            line_up = int(line_ups[0][1][1] * h)
+        else:
+            line_up = int(line_downs[0][1][1] * h)
+        line_down = int(line_downs[0][1][1] * h)
+
+        up_limit = int(line_downs[0][0][1] * h)
+        down_limit = int(line_downs[0][2][1] * h)
+
+        pts_L1 = np.array([[int(line_downs[0][1][0] * w), int(line_downs[0][1][1] * h)],
+                        [int(line_downs[0][1][2] * w), int(line_downs[0][1][3] * h)]]).reshape((-1, 1, 2)) # line down
+        pts_L2 = pts_L1 # line up # TODO
+        pts_L3 = np.array([[int(line_downs[0][0][0] * w), int(line_downs[0][0][1] * h)],
+                        [int(line_downs[0][0][2] * w), int(line_downs[0][0][3] * h)]]).reshape((-1, 1, 2)) # up limit
+        pts_L4 = np.array([[int(line_downs[0][2][0] * w), int(line_downs[0][2][1] * h)],
+                        [int(line_downs[0][2][2] * w), int(line_downs[0][2][3] * h)]]).reshape((-1, 1, 2)) # down limit
+    else:
+        # Lines
+        # Create Lines for video
+        if file_name == "test.mov":
+            line_up = int(2.5 * (h / 5))
+            line_down = int(4 * (h / 5))
+        elif file_name == "test2.mov":
+            line_up = int(2.5 * (h / 5))
+            line_down = int(4 * (h / 5))
+        elif file_name == "test3.mov":
+            line_up = int(2.5 * (h / 5))
+            line_down = int(4 * (h / 5))
+        elif file_name == "surveillance.m4v":
+            line_up = int(2.5 * (h / 5))
+            line_down = int(3 * (h / 5))
+        else:
+            line_up = int(3.25 * (h / 5))
+            line_down = int(3 * (h / 5))
+
+        up_limit = int(2 * (h / 5))
+        down_limit = int(4.5 * (h / 5))
+
+        pt1 = [0, line_down]
+        pt2 = [w, line_down]
+        pts_L1 = np.array([pt1, pt2], np.int32)
+        pts_L1 = pts_L1.reshape((-1, 1, 2))
+        pt3 = [0, line_up]
+        pt4 = [w, line_up]
+        pts_L2 = np.array([pt3, pt4], np.int32)
+        pts_L2 = pts_L2.reshape((-1, 1, 2))
+
+        pt5 = [0, up_limit]
+        pt6 = [w, up_limit]
+        pts_L3 = np.array([pt5, pt6], np.int32)
+        pts_L3 = pts_L3.reshape((-1, 1, 2))
+        pt7 = [0, down_limit]
+        pt8 = [w, down_limit]
+        pts_L4 = np.array([pt7, pt8], np.int32)
+        pts_L4 = pts_L4.reshape((-1, 1, 2))
 
     print("Red line y: ", str(line_down))
     print("Blue line y: ", str(line_up))
@@ -97,24 +143,6 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
     line_down_color = (255, 0, 0)
     # Sets line_up_color to purple
     line_up_color = (255, 0, 255)
-
-    pt1 = [0, line_down]
-    pt2 = [w, line_down]
-    pts_L1 = np.array([pt1, pt2], np.int32)
-    pts_L1 = pts_L1.reshape((-1, 1, 2))
-    pt3 = [0, line_up]
-    pt4 = [w, line_up]
-    pts_L2 = np.array([pt3, pt4], np.int32)
-    pts_L2 = pts_L2.reshape((-1, 1, 2))
-
-    pt5 = [0, up_limit]
-    pt6 = [w, up_limit]
-    pts_L3 = np.array([pt5, pt6], np.int32)
-    pts_L3 = pts_L3.reshape((-1, 1, 2))
-    pt7 = [0, down_limit]
-    pt8 = [w, down_limit]
-    pts_L4 = np.array([pt7, pt8], np.int32)
-    pts_L4 = pts_L4.reshape((-1, 1, 2))
 
     # Background Subtractor (contains binary image of moving objects)
     fgbg = cv2.createBackgroundSubtractorMOG2(detectShadows=True)

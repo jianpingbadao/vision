@@ -327,7 +327,8 @@ class Root(Tk):
                 one_line[3] /= vid_y
                 lines.append(one_line)
             # TODO: add the option to choose direction when selecting lines
-            direction_and_lines.append({"direction": None, "lines": lines})
+            # TODO: update the direction to reflect user choice
+            direction_and_lines.append({"direction": 'down', "lines": lines})
 
         execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
 
