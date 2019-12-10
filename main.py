@@ -4,6 +4,7 @@ import vehicles
 import time
 import os
 
+debug = True
 
 def execute(directory, file_n, result_n, up_dwn, lines=None):
     """ 
@@ -24,15 +25,22 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
 
         up_dwn: type = Integer, optimal: 0 = count cars going down, 1 = count cars going up, 2 = count cars going both up and down
 
-        lines : dictionary,
+        lines : list,
                 The lines that are used to determine the moving direction of the vehicles in the video.
+                Each element of the list is a dictionary, of which,
                 Key is the moving direction, i.e., up or down;
-                Values are three lines, and each line consists of 4 numbers, i.e., x_left, y_left, x_right, y_right
+                Values are three lines, and each line consists of 4 numbers (relative, range is [0, 1]), i.e., x_left, y_left, x_right, y_right
 
         returns
         ----------
         none
     """
+    if debug:
+        if lines:
+            for direction_and_line in lines:
+                print(direction_and_line['direction'])
+                for line in direction_and_line['lines']:
+                    print(line)
     os.chdir(directory)
     file_name = file_n
     result_name = result_n
