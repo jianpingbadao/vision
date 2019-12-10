@@ -267,19 +267,7 @@ class Root(Tk):
 
         # self.imageCanvas.after(500, self.imageCanvas.delete, self.canvas_id_one) # Delete after 1 second
 
-        x_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0]
-        y_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1]
-        x_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2]
-        y_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3]
-
-        print(x_1)  # debug
-
-        x_1 = int(x_1)
-        y_1 = int(y_1)
-        x_2 = int(x_2)
-        y_2 = int(y_2)
-
-        print(x_1)  # debug
+        x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
 
         self.imageCanvas.create_line(x_1, y_1, x_2, y_2, fill="green")
         self.cur_line += 1
