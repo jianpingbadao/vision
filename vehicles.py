@@ -91,8 +91,8 @@ class Car:
         if len(self.tracks) >= 2:
             if self.state == '0':
                 # TODO: The same change goes here as with going_UP()
-                if self.tracks[-1][1] > self.tracks[-2][1]:
-                # if self.tracks[-1][1] > mid_line and self.tracks[-2][1] <= mid_line:
+                # if self.tracks[-1][1] > self.tracks[-2][1]:
+                if self.tracks[-1][1] > mid_line and self.tracks[-2][1] <= mid_line:
                     self.state = '1'
                     self.dir = 'down'
                     return True
