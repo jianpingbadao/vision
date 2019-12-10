@@ -385,6 +385,7 @@ class Root(Tk):
         self.imageCanvas.delete("all")
         self.imageCanvas.bind('<1>', self.canvasClickCallBack)
         self.process_button.config(state=DISABLED)
+        self.reset_button.config(state=DISABLED)
 
 
     def create_entries_to_hold_lines(self, num_lanes):
