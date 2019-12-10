@@ -260,12 +260,8 @@ class Root(Tk):
         global x_2
         global y_2
 
-        print("next")  # debug
         global next_clicked
         next_clicked = True
-        print(next_clicked)  # debug
-
-        # self.imageCanvas.after(500, self.imageCanvas.delete, self.canvas_id_one) # Delete after 1 second
 
         x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
 
@@ -383,7 +379,7 @@ class Root(Tk):
         global j
         self.filename = ' '
         self.filename_strvar.set(' ')  # debug should set display to empty
-        print(self.filename_strvar.get())
+        # print(self.filename_strvar.get())
         self.button.config(state=NORMAL)
         self.enter_button.config(state=NORMAL)
 
@@ -406,8 +402,8 @@ class Root(Tk):
                 self.next_entries[n][m].grid_forget()
                 self.line_entries[n][m].grid_remove()
         # print('a')
-        print(self.num_of_groups)
-        print(self.num_of_lines_per_group)
+        # print(self.num_of_groups)
+        # print(self.num_of_lines_per_group)
 
         try:
             self.group_label.grid_forget()  # delete group label
@@ -419,7 +415,7 @@ class Root(Tk):
         self.num_of_groups_strvar.set('')
         self.num_of_groups = 0
         # self.num_of_groups.set(' ')
-        print(self.num_of_groups)
+        # print(self.num_of_groups)
 
         i = 0
         j = 0
@@ -549,7 +545,7 @@ class Root(Tk):
         global next_clicked
         """ handle button click event and output text from entry area"""
         input = self.entry_lane.get()
-        print(input)
+        # print(input)
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
         self.submitButton.config(state=DISABLED)
