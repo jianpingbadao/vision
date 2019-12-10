@@ -39,4 +39,5 @@ A simple demo to show how the `VideoCapture()` works with the webcam:
    You can edit on terminal by typing [nano runMany] and inside you will see an array in which you can populate with multiple URL's as a string. Save the file and run chmod +x runMany. From terminal run the command [./runMany]
 
 4. To process a sample video, run command [python original.py]
+
    **TO Be Continued**
