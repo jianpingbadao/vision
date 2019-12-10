@@ -73,7 +73,8 @@ class Root(Tk):
         num_lanes = 1  # Default 1 lane, for some reason can only increase lanes, can't decrease
         self.create_entries_to_hold_lines(num_lanes)
         self.label_lane = Label(self, text="Enter # of lanes").grid(row=0, column=4)
-        self.entry_lane = Entry(self, textvariable=self.num_of_groups, state=DISABLED)
+        self.num_of_groups_strvar = StringVar()
+        self.entry_lane = Entry(self, textvariable=self.num_of_groups_strvar, state=DISABLED)
         self.entry_lane.grid(row=1, column=4)
 
         global coord
@@ -421,6 +422,7 @@ class Root(Tk):
 
         self.submitButton.config(state=DISABLED)
         # self.entry_lane.config(state = NORMAL)
+        self.num_of_groups_strvar.set('')
         self.num_of_groups = 0
         # self.num_of_groups.set(' ')
         print(self.num_of_groups)
