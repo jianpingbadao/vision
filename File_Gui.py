@@ -72,7 +72,7 @@ class Root(Tk):
         # Assigns num of lanes for data point entries
         num_lanes = 1  # Default 1 lane, for some reason can only increase lanes, can't decrease
         self.create_entries_to_hold_lines(num_lanes)
-        self.label_lane = Label(self, text="Enter # of lanes").grid(row=0, column=4)
+        self.label_lane = Label(self, text="Enter # of directions").grid(row=0, column=4)
         self.num_of_groups_strvar = StringVar()
         self.entry_lane = Entry(self, textvariable=self.num_of_groups_strvar, state=DISABLED)
         self.entry_lane.grid(row=1, column=4)
@@ -82,15 +82,12 @@ class Root(Tk):
         self.submitButton = Button(self, command=self.submitButtonClick, text="Submit", state=DISABLED)
         self.submitButton.grid(row=1, column=5)
 
-        # self.next_entry(index)
-
 
     # URL text Handler 
     def enter_URL(self):
         '''
         Takes in URL input to find link and then uses that for video
         '''
-        # self.filename = self.filename_strvar.get()
         self.enter_button.config(state=DISABLED)
         self.button.config(state=DISABLED)  # Disable file browser button
         self.submitButton.config(state=NORMAL)
@@ -98,8 +95,8 @@ class Root(Tk):
         print(self.filename_strvar.get())  # debug Input UrL
         self.get_pic()
 
+
     def get_pic(self):
-        global desktop_path
         website_name = self.filename_strvar.get()
         driver = webdriver.Chrome(executable_path=chromedriver_path)
         # https://nyctmc.org/google_popup.php?cid=975
@@ -154,20 +151,14 @@ class Root(Tk):
         self.display()
         return strTime
 
+
     def display(self):
         self.filename = "video.avi"
         self.filename_strvar.set(self.filename)  # Display filename
-        # self.filename_strvar = Entry(self, text = self.filename)
-        # self.filename_strvar.grid(row = 13, column = 0)
-        # self.filename_strvar.config(state = DISABLED)
 
         cap = cv2.VideoCapture(self.filename)  # Play video of file
 
-        # while True:
-        # Video 
         _, frame = cap.read()
-        # cv2.imshow('frame', self.frame)
-        # frame = cv2.flip(self.frame, 1)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
 
@@ -177,19 +168,12 @@ class Root(Tk):
 
         self.video_image_tk = imgtk  # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
         self.imageCanvas.create_image(0, 0, anchor=NW, image=imgtk)
-        ##### Draw lines
-        # self.imageCanvas.create_line()
 
         self.video_file_loaded = True
 
-        # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.submitButtonClick)
-        # self.newbut.grid(row = 0, column = 0)
-        # self.lmain.after(10, self.fileDialog) 
-
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-        #     break
         cap.release()
         cv2.destroyAllWindows()
+
 
     def get_current_time(self):
         """
@@ -202,6 +186,7 @@ class Root(Tk):
         """
         now = datetime.fromtimestamp(time.time())
         return now.strftime("%Y-%m-%d-%H-%M-%S-%f")
+
 
     def get_image_border(self, image_path):
         """
@@ -237,13 +222,14 @@ class Root(Tk):
 
         return left, top, right, down
 
+
     def next_entry(self):
         global i
         global j
 
         x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
 
-        self.imageCanvas.create_line(x_1, y_1, x_2, y_2, fill="green")
+        self.imageCanvas.create_line(x_1, y_1, x_2, y_2, fill="red", width=3)
         self.cur_line += 1
 
         if self.cur_line == self.num_of_lines_per_group:
@@ -279,10 +265,6 @@ class Root(Tk):
         Probably want to disable this function/button until all data is entered
         to avoid errors.
         '''
-        print(self.num_of_groups)
-        print(self.num_of_lines_per_group)
-        # print(self.filename)
-        # self.next_entries.append(next_entries_cur_group)
         self.group_num_L = []  # group num list
         self.opt_L = []  # opt list
         self.Speed_num = []  # Speed num list
@@ -292,8 +274,6 @@ class Root(Tk):
 
         self.group_label = Label(self, text="Lane Data")
         self.group_label.grid(row=0, column=6)
-        # self.entry_lane = Entry(self, textvariable = self.num_of_groups, state = DISABLED)
-        # self.entry_lane.grid(row = 1, column = 4)
 
         option_list = ["UP", "DOWN"]
         # self.variable = StringVar()
@@ -337,6 +317,7 @@ class Root(Tk):
             self.Speed_label_L.append(Speed_label)
 
         execute(os.getcwd(), self.filename, "result.txt", 2)
+
 
     ######
     ### Reset
@@ -389,6 +370,7 @@ class Root(Tk):
         self.imageCanvas.delete("all")
         self.imageCanvas.bind('<1>', self.canvasClickCallBack)
         self.process_button.config(state=DISABLED)
+
 
     def create_entries_to_hold_lines(self, num_lanes):
         """
@@ -481,9 +463,8 @@ class Root(Tk):
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
 
+
     def submitButtonClick(self):
-        # global i
-        # global j
         """ handle button click event and output text from entry area"""
         input = self.entry_lane.get()
         # print(input)
@@ -495,30 +476,12 @@ class Root(Tk):
         self.entry_lane.config(state=DISABLED)
         # self.imageCanvas.bind('<1>')
 
-        # j += 1
-        # if(i <= self.num_of_groups*self.num_of_lines_per_group):
-        # self.next_entries[i][j].config(state = NORMAL)
-        # j += 1
-        # if j == self.num_of_lines_per_group:
-        # i +=1
-        # j = 0
-        # self.button_next.config(state = NORMAL)
-        # self.submitButton.config(state = DISABLED)
-
-    # def click(self):
-    #  global vid_x
-    # global vid_y
-    # x = vid_x + 100
-    # y = vid_y + 100
-    # self.vid_button = ttk.Button(self)
-    # self.vid_button.config(width = x, height = y)
-    # self.vid_button.grid(row = 0, column = 0)
-
 
     def create_file_dialog_button(self):
         # Create Button to open file directory
         self.button = ttk.Button(self.labelFrame, text="File Browser", command=self.fileDialog)
         self.button.grid(row=12, column=0)
+
 
     def check_video_file(self, filename):
         """
@@ -541,6 +504,7 @@ class Root(Tk):
                 return True
         return False
 
+
     def fileDialog(self):
         # Reads file to video and displays video in Gui
         global vid_x
@@ -560,17 +524,10 @@ class Root(Tk):
             return
 
         self.filename_strvar.set(self.filename)  # Display filename
-        # self.filename_strvar = Entry(self, text = self.filename)
-        # self.filename_strvar.grid(row = 13, column = 0)
-        # self.filename_strvar.config(state = DISABLED)
 
         cap = cv2.VideoCapture(self.filename)  # Play video of file
 
-        # while True:
-        # Video 
         _, frame = cap.read()
-        # cv2.imshow('frame', self.frame)
-        # frame = cv2.flip(self.frame, 1)
         cv2image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGBA)
         img = Image.fromarray(cv2image)
 
@@ -580,23 +537,11 @@ class Root(Tk):
 
         self.video_image_tk = imgtk  # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
         self.imageCanvas.create_image(0, 0, anchor=NW, image=imgtk)
-        ##### Draw lines
-        # self.imageCanvas.create_line()
 
         self.video_file_loaded = True
 
-        # self.newbut = ttk.Button(self.labelFrame, image = img, command = self.submitButtonClick)
-        # self.newbut.grid(row = 0, column = 0)
-        # self.lmain.after(10, self.fileDialog) 
-
-        # if cv2.waitKey(1) & 0xFF == ord('q'):
-        #     break
         cap.release()
         cv2.destroyAllWindows()
-        # return self.filename
-
-    # def printf(self):
-    #   print(self.fileDialog())
 
 
 # arg1 = sys.argv[1]
