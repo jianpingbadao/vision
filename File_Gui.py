@@ -275,11 +275,11 @@ class Root(Tk):
        print(next_clicked) # debug
        
        # self.imageCanvas.after(500, self.imageCanvas.delete, self.canvas_id_one) # Delete after 1 second
-
-       x_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[0]
-       y_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[1]
-       x_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[2]
-       y_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(', ')[3]
+       self.entry_strvars[self.cur_group][self.cur_line].get().replace(" ", "")
+       x_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(',')[0]
+       y_1 = self.entry_strvars[self.cur_group][self.cur_line].get().split(',')[1]
+       x_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(',')[2]
+       y_2 = self.entry_strvars[self.cur_group][self.cur_line].get().split(',')[3]
 
        print(x_1) # debug
 
