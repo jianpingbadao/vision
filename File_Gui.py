@@ -20,7 +20,6 @@ desktop_path = os.path.expanduser("~/Desktop/")
 chromedriver_path = os.path.join(desktop_path, "chromedriver")
 vision_mater_path = os.path.join(desktop_path, "vision-master")
 
-val = False
 coord = None
 vid_x = 500  # Width of video
 vid_y = 300  # Height of video
@@ -90,15 +89,7 @@ class Root(Tk):
         # self.next_entry(index)
         global next_clicked
         next_clicked = False
-        global val
-        val = False
-        # self.click()
-        if (val == True):
-            val = False
-            print("second click")
-            # self.submitButtonClick()
 
-        # self.next_entries = []
 
     # URL text Handler 
     def enter_URL(self):
