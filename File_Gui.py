@@ -390,12 +390,15 @@ class Root(Tk):
         # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
             # self.next_entries.append(next_entries_cur_group)
-            self.group_num_L[n].grid_forget()
-            self.opt_L[n].grid_forget()
-            self.Speed_num[n].grid_forget()
-            self.Count_num[n].grid_forget()
-            self.Count_label_L[n].grid_forget()
-            self.Speed_label_L[n].grid_forget()
+            try:
+                self.group_num_L[n].grid_forget()
+                self.opt_L[n].grid_forget()
+                self.Speed_num[n].grid_forget()
+                self.Count_num[n].grid_forget()
+                self.Count_label_L[n].grid_forget()
+                self.Speed_label_L[n].grid_forget()
+            except:
+                continue
 
             for m in range(self.num_of_lines_per_group):
                 # self.next_entries[n][m].destroy()
@@ -406,7 +409,10 @@ class Root(Tk):
         print(self.num_of_groups)
         print(self.num_of_lines_per_group)
 
-        self.group_label.grid_forget()  # delete group label 
+        try:
+            self.group_label.grid_forget()  # delete group label
+        except:
+            print("", end="")
 
         self.submitButton.config(state=DISABLED)
         # self.entry_lane.config(state = NORMAL)
