@@ -16,6 +16,8 @@ import numpy as np
 from PIL import Image, ImageTk
 from selenium import webdriver
 
+from main import execute
+
 desktop_path = os.path.expanduser("~/Desktop/")
 chromedriver_path = os.path.join(desktop_path, "chromedriver")
 vision_mater_path = os.path.join(desktop_path, "vision-master")
@@ -346,6 +348,8 @@ class Root(Tk):
             self.Count_num.append(Count_num)
             self.Count_label_L.append(Count_label)
             self.Speed_label_L.append(Speed_label)
+
+        execute(os.getcwd(), self.filename, "result.txt", 2)
 
     ######
     ### Reset
