@@ -283,6 +283,7 @@ class Root(Tk):
         # Loop to create data locations
         start_row = 3
         start_col = 6
+        direction_and_lines = []
         for group in range(self.num_of_groups):
             str_num = '# ' + str(group + 1)
             group_num = Label(self, text=str_num)
@@ -316,7 +317,19 @@ class Root(Tk):
             self.Count_label_L.append(Count_label)
             self.Speed_label_L.append(Speed_label)
 
-        execute(os.getcwd(), self.filename, "result.txt", 2)
+            # collect the locations of lines
+            lines = []
+            for line_num in range(self.num_of_lines_per_group):
+                one_line = [int(num.strip()) for num in self.entry_strvars[group][line_num].get().split(',')]
+                one_line[0] /= vid_x
+                one_line[1] /= vid_y
+                one_line[2] /= vid_x
+                one_line[3] /= vid_y
+                lines.append(one_line)
+            # TODO: add the option to choose direction when selecting lines
+            direction_and_lines.append({"direction": None, "lines": lines})
+
+        execute(os.getcwd(), self.filename, "result.txt", 2, direction_and_lines)
 
 
     ######
