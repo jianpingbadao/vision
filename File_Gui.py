@@ -527,8 +527,6 @@ class Root(Tk):
 
         # Disable button
         self.button.config(state=DISABLED)
-        self.entry_lane.config(state=NORMAL)
-        self.submitButton.config(state=NORMAL)
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File")  # Read File
 
         self.update()  # fix the freeze issue on Mac in the File Selection popup
@@ -559,6 +557,9 @@ class Root(Tk):
         cv2.destroyAllWindows()
 
         self.reset_button.config(state=NORMAL)
+        self.entry_lane.config(state=NORMAL)
+        self.submitButton.config(state=NORMAL)
+
 
 # arg1 = sys.argv[1]
 
