@@ -70,8 +70,6 @@ class Root(Tk):
         self.process_button.grid(row=13, column=2)
 
         # Assigns num of lanes for data point entries
-        num_lanes = 1  # Default 1 lane, for some reason can only increase lanes, can't decrease
-        self.create_entries_to_hold_lines(num_lanes)
         self.label_lane = Label(self, text="Enter # of directions").grid(row=0, column=4)
         self.num_of_groups_strvar = StringVar()
         self.entry_lane = Entry(self, textvariable=self.num_of_groups_strvar, state=DISABLED)
