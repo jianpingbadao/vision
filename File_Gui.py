@@ -62,7 +62,7 @@ class Root(Tk):
         self.enter_button.grid(row=13, column=1)
 
         # Reset
-        self.reset_button = Button(self, command=self.reset, text="Reset", state=NORMAL)
+        self.reset_button = Button(self, command=self.reset, text="Reset", state=DISABLED)
         self.reset_button.grid(row=11, column=2)
 
         # Process
@@ -558,6 +558,7 @@ class Root(Tk):
         cap.release()
         cv2.destroyAllWindows()
 
+        self.reset_button.config(state=NORMAL)
 
 # arg1 = sys.argv[1]
 
