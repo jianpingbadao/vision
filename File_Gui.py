@@ -75,6 +75,8 @@ class Root(Tk):
         self.entry_lane = Entry(self, textvariable=self.num_of_groups_strvar, state=DISABLED)
         self.entry_lane.grid(row=1, column=4)
 
+        self.num_of_groups = 0  # in case the reset button is clicke but this is not initialized
+
         """Create Submit Button"""
         # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
         self.submitButton = Button(self, command=self.submitButtonClick, text="Submit", state=DISABLED)
@@ -324,9 +326,8 @@ class Root(Tk):
                 one_line[2] /= vid_x
                 one_line[3] /= vid_y
                 lines.append(one_line)
-            # TODO: add the option to choose direction when selecting lines
-            # TODO: update the direction to reflect user choice
-            direction_and_lines.append({"direction": 'down', "lines": lines})
+
+            direction_and_lines.append({"direction": self.direction_vars[group].get(), "lines": lines})
 
         execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
 
@@ -358,13 +359,15 @@ class Root(Tk):
                 self.Count_label_L[n].grid_forget()
                 self.Speed_label_L[n].grid_forget()
             except:
-                continue
+                print('', end='')
 
             for m in range(self.num_of_lines_per_group):
                 # self.next_entries[n][m].destroy()
                 # self.line_entries[n][m].destroy()
                 self.next_entries[n][m].grid_forget()
                 self.line_entries[n][m].grid_remove()
+
+            self.direction_opt_menus[n].grid_remove()
 
         try:
             self.group_label.grid_forget()  # delete group label
@@ -400,6 +403,19 @@ class Root(Tk):
 
         start_row = 3
         start_col = 4
+
+        self.direction_opt_menus = []
+        self.direction_vars = []
+        option_list = ['up', 'down']
+        for group in range(self.num_of_groups):
+            cur_direction_var = StringVar()
+            self.direction_vars.append(cur_direction_var)
+            opt_menu = OptionMenu(self, cur_direction_var, *option_list)
+            opt_menu.config()
+            opt_menu.grid(row=start_row, column=start_col)
+            self.direction_opt_menus.append(opt_menu)
+            start_row += 1
+
         next_button_index = 0  # keeps track of next button
         for group in range(self.num_of_groups):
             line_entries_cur_group = []
