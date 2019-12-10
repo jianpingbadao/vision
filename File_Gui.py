@@ -329,7 +329,7 @@ class Root(Tk):
             # TODO: add the option to choose direction when selecting lines
             direction_and_lines.append({"direction": None, "lines": lines})
 
-        execute(os.getcwd(), self.filename, "result.txt", 2, direction_and_lines)
+        execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
 
 
     ######
@@ -442,6 +442,7 @@ class Root(Tk):
         """
         self.imageCanvas.unbind('<1>')  # unbind canvas
         self.process_button.config(state=NORMAL)
+
 
     def canvasClickCallBack(self, event):
         """The call back function when the mouse clicks on the image canvas.

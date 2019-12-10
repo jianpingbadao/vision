@@ -41,6 +41,7 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
                 print(direction_and_line['direction'])
                 for line in direction_and_line['lines']:
                     print(line)
+
     os.chdir(directory)
     file_name = file_n
     result_name = result_n
@@ -80,6 +81,9 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
     elif file_name == "test3.mov":
         line_up = int(2.5 * (h / 5))
         line_down = int(4 * (h / 5))
+    elif file_name == "surveillance.m4v":
+        line_up = int(2.5 * (h / 5))
+        line_down = int(3 * (h / 5))
     else:
         line_up = int(3.25 * (h / 5))
         line_down = int(3 * (h / 5))
@@ -154,7 +158,7 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
             countours0, hierarchy = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
             for cnt in countours0:
                 area = cv2.contourArea(cnt)
-                print(f"Detected area size: {area}")
+                # print(f"Detected area size: {area}")
                 if area > areaTH:
                     ####Tracking######
                     m = cv2.moments(cnt)
