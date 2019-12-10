@@ -174,7 +174,7 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
                                     if i.going_UP(line_up):
                                         cnt_up += 1
                                         content = "ID: " + str(i.getId()) + ' crossed going up at ' + time.strftime("%c")
-                                        writer.writerow((str(i.getId()), "going up", time.strftime("%c")))
+                                        writer.writerow(("ID: " + str(i.getId()), "going up", time.strftime("%c")))
                                         contents.append(content)
                                         print(content)
                                         t1 = time.time()
