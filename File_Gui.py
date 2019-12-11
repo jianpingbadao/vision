@@ -495,7 +495,7 @@ class Root(Tk):
                 self.cur_group %= self.num_of_groups
 
 
-    def submitButtonClick(self):
+    def submitButtonClick(self, event=None):
         """ handle button click event and output text from entry area"""
         input = self.group_num_entry.get()
         if not input:
@@ -580,6 +580,8 @@ class Root(Tk):
         self.reset_button.config(state=NORMAL)
         self.group_num_entry.config(state=NORMAL)
         self.submitButton.config(state=NORMAL)
+        self.submitButton.bind('<Return>', self.submitButtonClick)
+        self.group_num_entry.focus_set()
 
 
 # arg1 = sys.argv[1]
