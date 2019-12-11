@@ -24,7 +24,6 @@ vision_mater_path = os.path.join(desktop_path, "vision-master")
 
 vid_x = 500  # Width of video
 vid_y = 300  # Height of video
-end = False  # boolean if all points have been input
 
 
 class Root(Tk):
@@ -219,7 +218,9 @@ class Root(Tk):
 
 
     def next_entry(self):
-
+        """
+        Finish inputing/pickin up for one line, and move to the next one if possible.
+        """
         try:
             x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
         except:
@@ -237,7 +238,7 @@ class Root(Tk):
 
             # finished the last group
             if self.cur_group >= self.num_of_groups:
-                self.end()
+                self.finish_lines_pickup()
                 return
 
         self.next_buttons[self.cur_group][self.cur_line].config(state=NORMAL)
@@ -356,7 +357,7 @@ class Root(Tk):
         self.cur_click = 0
 
 
-    def end(self):
+    def finish_lines_pickup(self):
         """a
         Signal to end / freeze canvas to stop allowing button clicks
         """
