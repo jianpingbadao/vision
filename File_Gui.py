@@ -540,16 +540,17 @@ class Root(Tk):
         global vid_x
         global vid_y
 
-        # Disable button
-        self.file_browser_button.config(state=DISABLED)
+
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File")  # Read File
 
         self.update()  # fix the freeze issue on Mac in the File Selection popup
 
-        self.enter_button.config(state=DISABLED)  # Disable enter button
-
         if not self.check_video_file(self.filename):
             return
+
+        # Disable button
+        self.file_browser_button.config(state=DISABLED)
+        self.enter_button.config(state=DISABLED)  # Disable enter button
 
         self.filename_strvar.set(self.filename)  # Display filename
 
