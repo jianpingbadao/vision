@@ -44,9 +44,9 @@ class Root(Tk):
         # Graphics window
         global vid_x
         global vid_y
-        self.imageCanvas = Canvas(self, width=vid_x, height=vid_y, bg='grey')
-        self.imageCanvas.bind("<Button-1>", self.canvasClickCallBack)
-        self.imageCanvas.grid(row=0, column=0, rowspan=10, columnspan=3)  # Spans 10 rows, 3 cols
+        self.image_canvas = Canvas(self, width=vid_x, height=vid_y, bg='grey')
+        self.image_canvas.bind("<Button-1>", self.canvas_click_callback)
+        self.image_canvas.grid(row=0, column=0, rowspan=10, columnspan=3)  # Spans 10 rows, 3 cols
 
         self.labelFrame = ttk.LabelFrame(self, text="Open A Video File")
         self.labelFrame.grid(row=11, column=0, padx=10, pady=20)
@@ -167,7 +167,7 @@ class Root(Tk):
         imgtk = ImageTk.PhotoImage(image=img)
 
         self.video_image_tk = imgtk  # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
-        self.imageCanvas.create_image(0, 0, anchor=NW, image=imgtk)
+        self.image_canvas.create_image(0, 0, anchor=NW, image=imgtk)
 
         self.video_file_loaded = True
 
@@ -229,7 +229,7 @@ class Root(Tk):
 
         x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
 
-        self.imageCanvas.create_line(x_1, y_1, x_2, y_2, fill="red", width=3)
+        self.image_canvas.create_line(x_1, y_1, x_2, y_2, fill="red", width=3)
         self.cur_line += 1
 
         if self.cur_line == self.num_of_lines_per_group:
@@ -381,9 +381,9 @@ class Root(Tk):
 
         i = 0
         j = 0
-        # self.imageCanvas.bind('<1>', self.canvasClickCallBack)
-        self.imageCanvas.delete("all")
-        self.imageCanvas.bind('<1>', self.canvasClickCallBack)
+
+        self.image_canvas.delete("all")
+        self.image_canvas.bind('<1>', self.canvas_click_callback)
         self.process_button.config(state=DISABLED)
         self.reset_button.config(state=DISABLED)
         self.file_browser_button.focus()
@@ -457,11 +457,11 @@ class Root(Tk):
         """a
         Signal to end / freeze canvas to stop allowing button clicks
         """
-        self.imageCanvas.unbind('<1>')  # unbind canvas
+        self.image_canvas.unbind('<1>')  # unbind canvas
         self.process_button.config(state=NORMAL)
 
 
-    def canvasClickCallBack(self, event):
+    def canvas_click_callback(self, event):
         """The call back function when the mouse clicks on the image canvas.
         It will fill out the entries one by one.
         Parameters
@@ -470,7 +470,7 @@ class Root(Tk):
             The click event.
         """
 
-        print(f"{event.x}, {event.y}")
+        print(f"self.cur_click: {self.cur_click}, x: {event.x}, y: {event.y}")
         # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
 
         if self.cur_click == 0:
@@ -486,8 +486,8 @@ class Root(Tk):
             self.cur_click = 0
 
             x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
-            self.canvas_id_one = self.imageCanvas.create_line(x_1, y_1, x_2, y_2)
-            self.imageCanvas.after(3000, self.imageCanvas.delete, self.canvas_id_one)  # Delete after 1 second
+            self.canvas_id_one = self.image_canvas.create_line(x_1, y_1, x_2, y_2)
+            self.image_canvas.after(3000, self.image_canvas.delete, self.canvas_id_one)  # Delete after 1 second
 
             if self.cur_line == self.num_of_lines_per_group:
                 self.cur_line = 0
@@ -507,7 +507,7 @@ class Root(Tk):
         self.next_entries[0][0].config(state=NORMAL)  # enable first next button
         self.line_entries[0][0].config(state=NORMAL)  # enable first text entry
         self.group_num_entry.config(state=DISABLED)
-        # self.imageCanvas.bind('<1>')
+        # self.image_canvas.bind('<1>')
 
 
     def create_file_dialog_button(self):
@@ -570,7 +570,7 @@ class Root(Tk):
         imgtk = ImageTk.PhotoImage(image=img)
 
         self.video_image_tk = imgtk  # keep a reference to the image, otherwise, it will be destroyed by garbage-collection
-        self.imageCanvas.create_image(0, 0, anchor=NW, image=imgtk)
+        self.image_canvas.create_image(0, 0, anchor=NW, image=imgtk)
 
         self.video_file_loaded = True
 
