@@ -82,6 +82,8 @@ class Root(Tk):
         self.submit_button = Button(self, command=self.submit_button_click, text="Submit", state=DISABLED)
         self.submit_button.grid(row=1, column=5)
 
+        self.cur_click = 0
+
 
     # URL text Handler 
     def enter_URL(self):
