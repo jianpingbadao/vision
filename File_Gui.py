@@ -24,8 +24,6 @@ vision_mater_path = os.path.join(desktop_path, "vision-master")
 
 vid_x = 500  # Width of video
 vid_y = 300  # Height of video
-i = 0  # iterator for num of groups, used for next button
-j = 0  # iterator for num of lanes per group, used for next button
 end = False  # boolean if all points have been input
 
 
@@ -221,10 +219,14 @@ class Root(Tk):
 
 
     def next_entry(self):
-        global i
-        global j
 
-        x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
+        try:
+            x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
+        except:
+            return
+
+        self.next_buttons[self.cur_group][self.cur_line].config(state=DISABLED)
+        self.line_entries[self.cur_group][self.cur_line].config(state=DISABLED)
 
         self.image_canvas.create_line(x_1, y_1, x_2, y_2, fill="red", width=3)
         self.cur_line += 1
@@ -232,20 +234,14 @@ class Root(Tk):
         if self.cur_line == self.num_of_lines_per_group:
             self.cur_line = 0
             self.cur_group += 1
-            self.cur_group %= self.num_of_groups
 
-        self.next_buttons[i][j].config(state=DISABLED)
-        self.line_entries[i][j].config(state=DISABLED)
-        if i <= self.num_of_groups - 1:
-            if i == self.num_of_groups - 1 and j == self.num_of_lines_per_group - 1:
+            # finished the last group
+            if self.cur_group >= self.num_of_groups:
                 self.end()
-            else:
-                j += 1
-                if j == self.num_of_lines_per_group:
-                    i += 1
-                    j = 0
-                self.next_buttons[i][j].config(state=NORMAL)
-                self.line_entries[i][j].config(state=NORMAL)
+                return
+
+        self.next_buttons[self.cur_group][self.cur_line].config(state=NORMAL)
+        self.line_entries[self.cur_group][self.cur_line].config(state=NORMAL)
 
 
     def process(self):
@@ -282,8 +278,6 @@ class Root(Tk):
         File must be enabled
         Text boxes must be cleared and lanes must be destroyed
         '''
-        global i
-        global j
         self.filename = None
         self.filename_strvar.set('')  # debug should set display to empty
         self.file_browser_button.config(state=NORMAL)
@@ -301,8 +295,8 @@ class Root(Tk):
         self.num_of_groups_strvar.set('')
         self.num_of_groups = 0
 
-        i = 0
-        j = 0
+        self.cur_group = 0
+        self.cur_line = 0
 
         self.image_canvas.delete("all")
         self.process_button.config(state=DISABLED)
