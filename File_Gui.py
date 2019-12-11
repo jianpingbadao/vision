@@ -254,64 +254,12 @@ class Root(Tk):
         use those to iterate through each entry and collect points.
         Use point data with vid_x, vid_y size to get ratio
         Send to other video processing function for process.
-        In other video processing function use ratio to set lines 
-        on original video size.
-        Alternatively could probably set video to be processed to specific size
-        as is done in this file for the screen shot.
-        Probably want to disable this function/button until all data is entered
-        to avoid errors.
         '''
-        self.group_num_L = []  # group num list
-        self.opt_L = []  # opt list
-        self.Speed_num = []  # Speed num list
-        self.Count_num = []  # Count num list
-        self.Count_label_L = []  # Count label list
-        self.Speed_label_L = []  # Speed label list
-
-        self.group_label = Label(self, text="Lane Data")
-        self.group_label.grid(row=0, column=6)
-
-        option_list = ["UP", "DOWN"]
-        self.count_strvar = StringVar()
-        self.speed_strvar = StringVar()
-
         # Loop to create data locations
         start_row = 3
         start_col = 6
         direction_and_lines = []
         for group in range(self.num_of_groups):
-            str_num = '# ' + str(group + 1)
-            group_num = Label(self, text=str_num)
-            group_num.grid(row=start_row, column=start_col)
-
-            self.variable = StringVar()
-            self.variable.set(option_list[0])
-
-            opt = OptionMenu(self, self.variable, *option_list)
-            opt.grid(row=start_row, column=start_col + 1)
-            # self.opt.config(width=90, font=('Helvetica', 12))
-            start_row += 1
-            Count_label = Label(self, text="Count")
-            Count_label.grid(row=start_row, column=start_col)
-            Speed_label = Label(self, text="Speed mph")
-            Speed_label.grid(row=start_row, column=start_col + 1)
-            start_row += 1
-
-            # Counts that need to be updated with processing code
-            Count_num = Label(self, textvariable=self.count_strvar)
-            Count_num.grid(row=start_row, column=start_col)
-            Speed_num = Label(self, textvariable=self.speed_strvar)
-            Speed_num.grid(row=start_row, column=start_col + 1)
-            start_row += 1
-
-            # self.next_entries.append(next_entries_cur_group)
-            self.group_num_L.append(group_num)
-            self.opt_L.append(opt)
-            self.Speed_num.append(Speed_num)
-            self.Count_num.append(Count_num)
-            self.Count_label_L.append(Count_label)
-            self.Speed_label_L.append(Speed_label)
-
             # collect the locations of lines
             lines = []
             for line_num in range(self.num_of_lines_per_group):
@@ -342,28 +290,11 @@ class Root(Tk):
 
         # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
-            try:
-                self.group_num_L[n].grid_forget()
-                self.opt_L[n].grid_forget()
-                self.Speed_num[n].grid_forget()
-                self.Count_num[n].grid_forget()
-                self.Count_label_L[n].grid_forget()
-                self.Speed_label_L[n].grid_forget()
-            except:
-                print('', end='')
-
             for m in range(self.num_of_lines_per_group):
-                # self.next_entries[n][m].destroy()
-                # self.line_entries[n][m].destroy()
                 self.next_entries[n][m].grid_forget()
                 self.line_entries[n][m].grid_remove()
 
             self.direction_opt_menus[n].grid_remove()
-
-        try:
-            self.group_label.grid_forget()  # delete group label
-        except:
-            print("", end="")
 
         self.submit_button.config(state=DISABLED)
         self.num_of_groups_strvar.set('')
