@@ -497,6 +497,8 @@ class Root(Tk):
     def submitButtonClick(self):
         """ handle button click event and output text from entry area"""
         input = self.group_num_entry.get()
+        if not input:
+            return
         # print(input)
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
