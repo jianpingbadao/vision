@@ -234,7 +234,7 @@ class Root(Tk):
             self.cur_group += 1
             self.cur_group %= self.num_of_groups
 
-        self.next_entries[i][j].config(state=DISABLED)
+        self.next_buttons[i][j].config(state=DISABLED)
         self.line_entries[i][j].config(state=DISABLED)
         if i <= self.num_of_groups - 1:
             if i == self.num_of_groups - 1 and j == self.num_of_lines_per_group - 1:
@@ -244,7 +244,7 @@ class Root(Tk):
                 if j == self.num_of_lines_per_group:
                     i += 1
                     j = 0
-                self.next_entries[i][j].config(state=NORMAL)
+                self.next_buttons[i][j].config(state=NORMAL)
                 self.line_entries[i][j].config(state=NORMAL)
 
 
@@ -292,7 +292,7 @@ class Root(Tk):
         # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
             for m in range(self.num_of_lines_per_group):
-                self.next_entries[n][m].grid_forget()
+                self.next_buttons[n][m].grid_forget()
                 self.line_entries[n][m].grid_remove()
 
             self.direction_opt_menus[n].grid_remove()
@@ -322,7 +322,7 @@ class Root(Tk):
                               range(self.num_of_groups)]
 
         self.line_entries = []  # list of list of text widgets
-        self.next_entries = []  # list of list of buttons
+        self.next_buttons = []  # list of list of buttons
 
         start_row = 3
         start_col = 4
@@ -342,20 +342,20 @@ class Root(Tk):
         next_button_index = 0  # keeps track of next button
         for group in range(self.num_of_groups):
             line_entries_cur_group = []
-            next_entries_cur_group = []
+            next_buttons_cur_group = []
             for row in range(self.num_of_lines_per_group):
                 line_entry = Entry(self, textvariable=self.entry_strvars[group][row], state=DISABLED)
 
                 # Create next button
                 next_button_index += 1
-                next_entries_cur_group.append(
+                next_buttons_cur_group.append(
                     Button(self, text=("next" + str(next_button_index)), state=DISABLED, command=self.next_entry))
                 cur_row = start_row + row + group * self.num_of_lines_per_group
                 line_entry.grid(row=cur_row, column=start_col)
-                next_entries_cur_group[row].grid(row=cur_row, column=start_col + 1)
+                next_buttons_cur_group[row].grid(row=cur_row, column=start_col + 1)
                 line_entries_cur_group.append(line_entry)
 
-            self.next_entries.append(next_entries_cur_group)
+            self.next_buttons.append(next_buttons_cur_group)
             self.line_entries.append(line_entries_cur_group)
 
         if self.prev_lanes > self.num_of_groups:  # check to see if the new amount of lanes is less than the previous
@@ -416,7 +416,7 @@ class Root(Tk):
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
         self.submit_button.config(state=DISABLED)
-        self.next_entries[0][0].config(state=NORMAL)  # enable first next button
+        self.next_buttons[0][0].config(state=NORMAL)  # enable first next button
         self.line_entries[0][0].config(state=NORMAL)  # enable first text entry
         self.group_num_entry.config(state=DISABLED)
         self.image_canvas.bind("<Button-1>", self.canvas_click_callback)
