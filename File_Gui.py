@@ -332,9 +332,9 @@ class Root(Tk):
         option_list = ['up', 'down']
         for group in range(self.num_of_groups):
             cur_direction_var = StringVar()
+            cur_direction_var.set('down')
             self.direction_vars.append(cur_direction_var)
             opt_menu = OptionMenu(self, cur_direction_var, *option_list)
-            opt_menu.config()
             opt_menu.grid(row=start_row, column=start_col)
             self.direction_opt_menus.append(opt_menu)
             start_row += 1
