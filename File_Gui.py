@@ -77,18 +77,16 @@ class Root(Tk):
 
         self.cur_click = 0
 
-
     def enter_URL(self):
-        '''
+        """
         Takes in URL input to find link and then uses that for video
-        '''
+        """
         self.enter_button.config(state=DISABLED)
         self.file_browser_button.config(state=DISABLED)  # Disable file browser button
         self.submit_button.config(state=NORMAL)
         self.group_num_entry.config(state=NORMAL)
         print(self.filename_strvar.get())  # debug Input UrL
         self.get_pic()
-
 
     def get_pic(self):
         website_name = self.filename_strvar.get()
@@ -145,7 +143,6 @@ class Root(Tk):
         self.display()
         return strTime
 
-
     def display(self):
         self.filename = "video.avi"
         self.filename_strvar.set(self.filename)  # Display filename
@@ -168,7 +165,6 @@ class Root(Tk):
         cap.release()
         cv2.destroyAllWindows()
 
-
     def get_current_time(self):
         """
         Get current time in an easy to read format
@@ -180,7 +176,6 @@ class Root(Tk):
         """
         now = datetime.fromtimestamp(time.time())
         return now.strftime("%Y-%m-%d-%H-%M-%S-%f")
-
 
     def get_image_border(self, image_path):
         """
@@ -216,13 +211,13 @@ class Root(Tk):
 
         return left, top, right, down
 
-
     def next_entry(self):
         """
         Finish inputing/pickin up for one line, and move to the next one if possible.
         """
         try:
-            x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
+            x_1, y_1, x_2, y_2 = [int(num.strip()) for num in
+                                  self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
         except:
             return
 
@@ -244,14 +239,13 @@ class Root(Tk):
         self.next_buttons[self.cur_group][self.cur_line].config(state=NORMAL)
         self.line_entries[self.cur_group][self.cur_line].config(state=NORMAL)
 
-
     def process(self):
-        '''
+        """
         should take in filename, # of lanes, # of lines per group,
         use those to iterate through each entry and collect points.
         Use point data with vid_x, vid_y size to get ratio
         Send to other video processing function for process.
-        '''
+        """
         # Loop to create data locations
         start_row = 3
         start_col = 6
@@ -272,13 +266,12 @@ class Root(Tk):
         # TODO: add an entry to enter the output file name
         execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
 
-
     def reset(self):
-        ''' Reset will reset all the values on the screen.
+        """ Reset will reset all the values on the screen.
         User will be able to choose a new file and start over
         File must be enabled
         Text boxes must be cleared and lanes must be destroyed
-        '''
+        """
         self.filename = None
         self.filename_strvar.set('')  # debug should set display to empty
         self.file_browser_button.config(state=NORMAL)
@@ -303,7 +296,6 @@ class Root(Tk):
         self.process_button.config(state=DISABLED)
         self.reset_button.config(state=DISABLED)
         self.file_browser_button.focus()
-
 
     def create_entries_to_hold_lines(self, num_of_groups):
         """
@@ -357,14 +349,12 @@ class Root(Tk):
         self.cur_line = 0
         self.cur_click = 0
 
-
     def finish_lines_pickup(self):
         """a
         Signal to end / freeze canvas to stop allowing button clicks
         """
         self.image_canvas.unbind('<1>')  # unbind canvas
         self.process_button.config(state=NORMAL)
-
 
     def canvas_click_callback(self, event):
         """The call back function when the mouse clicks on the image canvas.
@@ -388,7 +378,8 @@ class Root(Tk):
         if self.cur_click == self.num_of_clicks_per_line:
             self.cur_click = 0
 
-            x_1, y_1, x_2, y_2 = [int(num.strip()) for num in self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
+            x_1, y_1, x_2, y_2 = [int(num.strip()) for num in
+                                  self.entry_strvars[self.cur_group][self.cur_line].get().split(',')]
             self.canvas_id_one = self.image_canvas.create_line(x_1, y_1, x_2, y_2)
             self.image_canvas.after(3000, self.image_canvas.delete, self.canvas_id_one)  # Delete after 1 second
 
@@ -396,7 +387,6 @@ class Root(Tk):
                 self.cur_line = 0
                 self.cur_group += 1
                 self.cur_group %= self.num_of_groups
-
 
     def submit_button_click(self, event=None):
         """ handle button click event and output text from entry area"""
@@ -411,14 +401,13 @@ class Root(Tk):
         self.group_num_entry.config(state=DISABLED)
         self.image_canvas.bind("<Button-1>", self.canvas_click_callback)
 
-
     def create_file_dialog_button(self):
         # Create Button to open file directory
-        self.file_browser_button = ttk.Button(self.file_browser_label_frame, text="File Browser", command=self.file_browser_dialog)
+        self.file_browser_button = ttk.Button(self.file_browser_label_frame, text="File Browser",
+                                              command=self.file_browser_dialog)
         self.file_browser_button.grid(row=12, column=0)
         self.file_browser_button.focus()
         self.file_browser_button.bind('<Return>', self.file_browser_dialog)
-
 
     def check_video_file(self, filename):
         """
@@ -440,7 +429,6 @@ class Root(Tk):
             if filename.endswith(extension):
                 return True
         return False
-
 
     def file_browser_dialog(self, event=None):
         # Reads file to video and displays video in Gui
