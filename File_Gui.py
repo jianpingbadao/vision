@@ -79,8 +79,8 @@ class Root(Tk):
 
         """Create Submit Button"""
         # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
-        self.submitButton = Button(self, command=self.submitButtonClick, text="Submit", state=DISABLED)
-        self.submitButton.grid(row=1, column=5)
+        self.submit_button = Button(self, command=self.submit_button_click, text="Submit", state=DISABLED)
+        self.submit_button.grid(row=1, column=5)
 
 
     # URL text Handler 
@@ -90,7 +90,7 @@ class Root(Tk):
         '''
         self.enter_button.config(state=DISABLED)
         self.file_browser_button.config(state=DISABLED)  # Disable file browser button
-        self.submitButton.config(state=NORMAL)
+        self.submit_button.config(state=NORMAL)
         self.group_num_entry.config(state=NORMAL)
         print(self.filename_strvar.get())  # debug Input UrL
         self.get_pic()
@@ -374,7 +374,7 @@ class Root(Tk):
         except:
             print("", end="")
 
-        self.submitButton.config(state=DISABLED)
+        self.submit_button.config(state=DISABLED)
         # self.group_num_entry.config(state = NORMAL)
         self.num_of_groups_strvar.set('')
         self.num_of_groups = 0
@@ -495,7 +495,7 @@ class Root(Tk):
                 self.cur_group %= self.num_of_groups
 
 
-    def submitButtonClick(self, event=None):
+    def submit_button_click(self, event=None):
         """ handle button click event and output text from entry area"""
         input = self.group_num_entry.get()
         if not input:
@@ -503,7 +503,7 @@ class Root(Tk):
         # print(input)
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
-        self.submitButton.config(state=DISABLED)
+        self.submit_button.config(state=DISABLED)
         self.next_entries[0][0].config(state=NORMAL)  # enable first next button
         self.line_entries[0][0].config(state=NORMAL)  # enable first text entry
         self.group_num_entry.config(state=DISABLED)
@@ -579,8 +579,8 @@ class Root(Tk):
 
         self.reset_button.config(state=NORMAL)
         self.group_num_entry.config(state=NORMAL)
-        self.submitButton.config(state=NORMAL)
-        self.submitButton.bind('<Return>', self.submitButtonClick)
+        self.submit_button.config(state=NORMAL)
+        self.submit_button.bind('<Return>', self.submit_button_click)
         self.group_num_entry.focus_set()
 
 
