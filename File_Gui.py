@@ -304,7 +304,7 @@ class Root(Tk):
         j = 0
 
         self.image_canvas.delete("all")
-        self.image_canvas.bind('<1>', self.canvas_click_callback)
+        # self.image_canvas.bind('<1>', self.canvas_click_callback)
         self.process_button.config(state=DISABLED)
         self.reset_button.config(state=DISABLED)
         self.file_browser_button.focus()
