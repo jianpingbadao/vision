@@ -32,8 +32,6 @@ end = False  # boolean if all points have been input
 class Root(Tk):
 
     def __init__(self):
-        # Constructor, Makes version 
-        # Args: self = Root
         super(Root, self).__init__()
         self.title("Video File Opener Window")
         self.minsize(600, 500)  # Min size of window
@@ -48,8 +46,8 @@ class Root(Tk):
         self.image_canvas.bind("<Button-1>", self.canvas_click_callback)
         self.image_canvas.grid(row=0, column=0, rowspan=10, columnspan=3)  # Spans 10 rows, 3 cols
 
-        self.labelFrame = ttk.LabelFrame(self, text="Open A Video File")
-        self.labelFrame.grid(row=11, column=0, padx=10, pady=20)
+        self.file_browser_label_frame = ttk.LabelFrame(self, text="Open A Video File")
+        self.file_browser_label_frame.grid(row=11, column=0, padx=10, pady=20)
         self.create_file_dialog_button()
 
         # filename entry
@@ -78,14 +76,12 @@ class Root(Tk):
         self.num_of_groups = 0  # in case the reset button is clicke but this is not initialized
 
         """Create Submit Button"""
-        # self.photo = Image.open("C:\Users\mhepel\Pictures\Cars_1.jpeg")
         self.submit_button = Button(self, command=self.submit_button_click, text="Submit", state=DISABLED)
         self.submit_button.grid(row=1, column=5)
 
         self.cur_click = 0
 
 
-    # URL text Handler 
     def enter_URL(self):
         '''
         Takes in URL input to find link and then uses that for video
@@ -253,7 +249,6 @@ class Root(Tk):
                 self.line_entries[i][j].config(state=NORMAL)
 
 
-    # Process
     def process(self):
         '''
         should take in filename, # of lanes, # of lines per group,
@@ -278,7 +273,6 @@ class Root(Tk):
         self.group_label.grid(row=0, column=6)
 
         option_list = ["UP", "DOWN"]
-        # self.variable = StringVar()
         self.count_strvar = StringVar()
         self.speed_strvar = StringVar()
 
@@ -334,8 +328,6 @@ class Root(Tk):
         execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
 
 
-    ######
-    ### Reset
     def reset(self):
         ''' Reset will reset all the values on the screen.
         User will be able to choose a new file and start over
@@ -344,15 +336,13 @@ class Root(Tk):
         '''
         global i
         global j
-        self.filename = ' '
-        self.filename_strvar.set(' ')  # debug should set display to empty
-        # print(self.filename_strvar.get())
+        self.filename = None
+        self.filename_strvar.set('')  # debug should set display to empty
         self.file_browser_button.config(state=NORMAL)
         self.enter_button.config(state=NORMAL)
 
         # Destroy old entry boxes and next buttons
         for n in range(self.num_of_groups):
-            # self.next_entries.append(next_entries_cur_group)
             try:
                 self.group_num_L[n].grid_forget()
                 self.opt_L[n].grid_forget()
@@ -377,7 +367,6 @@ class Root(Tk):
             print("", end="")
 
         self.submit_button.config(state=DISABLED)
-        # self.group_num_entry.config(state = NORMAL)
         self.num_of_groups_strvar.set('')
         self.num_of_groups = 0
 
@@ -445,7 +434,6 @@ class Root(Tk):
             self.line_entries.append(line_entries_cur_group)
 
         if self.prev_lanes > self.num_of_groups:  # check to see if the new amount of lanes is less than the previous
-            # for ln in range(self.prev_lanes - self.num_of_groups):
             for line_entry in self.grid_slaves():
                 if int(line_entry.grid_info()["row"]) > self.num_of_groups:
                     line_entry.grid_forget()
@@ -473,7 +461,6 @@ class Root(Tk):
         """
 
         print(f"self.cur_click: {self.cur_click}, x: {event.x}, y: {event.y}")
-        # self.line_entries[self.cur_group][self.cur_line].insert(-1, f"{event.x}, {event.y}")
 
         if self.cur_click == 0:
             self.entry_strvars[self.cur_group][self.cur_line].set(f"{event.x}, {event.y}")
@@ -514,10 +501,10 @@ class Root(Tk):
 
     def create_file_dialog_button(self):
         # Create Button to open file directory
-        self.file_browser_button = ttk.Button(self.labelFrame, text="File Browser", command=self.fileDialog)
+        self.file_browser_button = ttk.Button(self.file_browser_label_frame, text="File Browser", command=self.file_browser_dialog)
         self.file_browser_button.grid(row=12, column=0)
         self.file_browser_button.focus()
-        self.file_browser_button.bind('<Return>', self.fileDialog)
+        self.file_browser_button.bind('<Return>', self.file_browser_dialog)
 
 
     def check_video_file(self, filename):
@@ -542,11 +529,10 @@ class Root(Tk):
         return False
 
 
-    def fileDialog(self, event=None):
+    def file_browser_dialog(self, event=None):
         # Reads file to video and displays video in Gui
         global vid_x
         global vid_y
-
 
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File")  # Read File
 
@@ -555,9 +541,9 @@ class Root(Tk):
         if not self.check_video_file(self.filename):
             return
 
-        # Disable button
+        # Disable buttons
         self.file_browser_button.config(state=DISABLED)
-        self.enter_button.config(state=DISABLED)  # Disable enter button
+        self.enter_button.config(state=DISABLED)
 
         self.filename_strvar.set(self.filename)  # Display filename
 
