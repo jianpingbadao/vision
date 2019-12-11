@@ -89,7 +89,7 @@ class Root(Tk):
         Takes in URL input to find link and then uses that for video
         '''
         self.enter_button.config(state=DISABLED)
-        self.button.config(state=DISABLED)  # Disable file browser button
+        self.file_browser_button.config(state=DISABLED)  # Disable file browser button
         self.submitButton.config(state=NORMAL)
         self.group_num_entry.config(state=NORMAL)
         print(self.filename_strvar.get())  # debug Input UrL
@@ -345,7 +345,7 @@ class Root(Tk):
         self.filename = ' '
         self.filename_strvar.set(' ')  # debug should set display to empty
         # print(self.filename_strvar.get())
-        self.button.config(state=NORMAL)
+        self.file_browser_button.config(state=NORMAL)
         self.enter_button.config(state=NORMAL)
 
         # Destroy old entry boxes and next buttons
@@ -509,8 +509,8 @@ class Root(Tk):
 
     def create_file_dialog_button(self):
         # Create Button to open file directory
-        self.button = ttk.Button(self.labelFrame, text="File Browser", command=self.fileDialog)
-        self.button.grid(row=12, column=0)
+        self.file_browser_button = ttk.Button(self.labelFrame, text="File Browser", command=self.fileDialog)
+        self.file_browser_button.grid(row=12, column=0)
 
 
     def check_video_file(self, filename):
@@ -541,7 +541,7 @@ class Root(Tk):
         global vid_y
 
         # Disable button
-        self.button.config(state=DISABLED)
+        self.file_browser_button.config(state=DISABLED)
         self.filename = filedialog.askopenfilename(initialdir=os.getcwd(), title="Select a File")  # Read File
 
         self.update()  # fix the freeze issue on Mac in the File Selection popup
