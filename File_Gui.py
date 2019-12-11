@@ -43,7 +43,6 @@ class Root(Tk):
         global vid_x
         global vid_y
         self.image_canvas = Canvas(self, width=vid_x, height=vid_y, bg='grey')
-        self.image_canvas.bind("<Button-1>", self.canvas_click_callback)
         self.image_canvas.grid(row=0, column=0, rowspan=10, columnspan=3)  # Spans 10 rows, 3 cols
 
         self.file_browser_label_frame = ttk.LabelFrame(self, text="Open A Video File")
@@ -496,7 +495,7 @@ class Root(Tk):
         self.next_entries[0][0].config(state=NORMAL)  # enable first next button
         self.line_entries[0][0].config(state=NORMAL)  # enable first text entry
         self.group_num_entry.config(state=DISABLED)
-        # self.image_canvas.bind('<1>')
+        self.image_canvas.bind("<Button-1>", self.canvas_click_callback)
 
 
     def create_file_dialog_button(self):
