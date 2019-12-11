@@ -324,17 +324,18 @@ class Root(Tk):
         self.direction_opt_menus = []
         self.direction_vars = []
         option_list = ['up', 'down']
-        for group in range(self.num_of_groups):
-            cur_direction_var = StringVar()
-            cur_direction_var.set('down')
-            self.direction_vars.append(cur_direction_var)
-            opt_menu = OptionMenu(self, cur_direction_var, *option_list)
-            opt_menu.grid(row=start_row, column=start_col)
-            self.direction_opt_menus.append(opt_menu)
-            start_row += 1
 
         next_button_index = 0  # keeps track of next button
+        cur_row = start_row
         for group in range(self.num_of_groups):
+            cur_direction_var = StringVar()
+            cur_direction_var.set(option_list[group % len(option_list)])
+            self.direction_vars.append(cur_direction_var)
+            opt_menu = OptionMenu(self, cur_direction_var, *option_list)
+            opt_menu.grid(row=cur_row, column=start_col)
+            self.direction_opt_menus.append(opt_menu)
+            cur_row += 1
+
             line_entries_cur_group = []
             next_buttons_cur_group = []
             for row in range(self.num_of_lines_per_group):
@@ -344,10 +345,10 @@ class Root(Tk):
                 next_button_index += 1
                 next_buttons_cur_group.append(
                     Button(self, text=("next" + str(next_button_index)), state=DISABLED, command=self.next_entry))
-                cur_row = start_row + row + group * self.num_of_lines_per_group
                 line_entry.grid(row=cur_row, column=start_col)
                 next_buttons_cur_group[row].grid(row=cur_row, column=start_col + 1)
                 line_entries_cur_group.append(line_entry)
+                cur_row += 1
 
             self.next_buttons.append(next_buttons_cur_group)
             self.line_entries.append(line_entries_cur_group)
