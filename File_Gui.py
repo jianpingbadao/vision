@@ -272,6 +272,7 @@ class Root(Tk):
 
             direction_and_lines.append({"direction": self.direction_vars[group].get(), "lines": lines})
 
+        # TODO: add an entry to enter the output file name
         execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
 
 
@@ -304,7 +305,6 @@ class Root(Tk):
         j = 0
 
         self.image_canvas.delete("all")
-        # self.image_canvas.bind('<1>', self.canvas_click_callback)
         self.process_button.config(state=DISABLED)
         self.reset_button.config(state=DISABLED)
         self.file_browser_button.focus()
@@ -345,21 +345,16 @@ class Root(Tk):
             next_entries_cur_group = []
             for row in range(self.num_of_lines_per_group):
                 line_entry = Entry(self, textvariable=self.entry_strvars[group][row], state=DISABLED)
-                # button_next = Button(self, text = "next", state = DISABLED, command = lambda: self.next_entry(next_button_index)) # next button
 
                 # Create next button
-                # next_entries_cur_group.append(Button(self, text=("next"+ str(next_button_index)), state = DISABLED, command=lambda c=row: print(next_entries_cur_group[c].cget("text"))))
                 next_button_index += 1
                 next_entries_cur_group.append(
                     Button(self, text=("next" + str(next_button_index)), state=DISABLED, command=self.next_entry))
                 cur_row = start_row + row + group * self.num_of_lines_per_group
                 line_entry.grid(row=cur_row, column=start_col)
-                # button_next.grid(row = cur_row, column = start_col +1)
                 next_entries_cur_group[row].grid(row=cur_row, column=start_col + 1)
                 line_entries_cur_group.append(line_entry)
-                # next_entries_cur_group.append(button_next)
 
-            # next_entries_cur_group[1].config(state = DISABLED) # disables button 2 in each group.
             self.next_entries.append(next_entries_cur_group)
             self.line_entries.append(line_entries_cur_group)
 
@@ -389,7 +384,6 @@ class Root(Tk):
         event : obj
             The click event.
         """
-
         print(f"self.cur_click: {self.cur_click}, x: {event.x}, y: {event.y}")
 
         if self.cur_click == 0:
@@ -419,7 +413,6 @@ class Root(Tk):
         input = self.group_num_entry.get()
         if not input:
             return
-        # print(input)
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
         self.submit_button.config(state=DISABLED)
