@@ -386,6 +386,7 @@ class Root(Tk):
         self.imageCanvas.bind('<1>', self.canvasClickCallBack)
         self.process_button.config(state=DISABLED)
         self.reset_button.config(state=DISABLED)
+        self.file_browser_button.focus()
 
 
     def create_entries_to_hold_lines(self, num_lanes):
@@ -513,6 +514,8 @@ class Root(Tk):
         # Create Button to open file directory
         self.file_browser_button = ttk.Button(self.labelFrame, text="File Browser", command=self.fileDialog)
         self.file_browser_button.grid(row=12, column=0)
+        self.file_browser_button.focus()
+        self.file_browser_button.bind('<Return>', self.fileDialog)
 
 
     def check_video_file(self, filename):
@@ -537,7 +540,7 @@ class Root(Tk):
         return False
 
 
-    def fileDialog(self):
+    def fileDialog(self, event=None):
         # Reads file to video and displays video in Gui
         global vid_x
         global vid_y
