@@ -72,8 +72,8 @@ class Root(Tk):
         # Assigns num of lanes for data point entries
         self.label_lane = Label(self, text="Enter # of directions").grid(row=0, column=4)
         self.num_of_groups_strvar = StringVar()
-        self.entry_lane = Entry(self, textvariable=self.num_of_groups_strvar, state=DISABLED)
-        self.entry_lane.grid(row=1, column=4)
+        self.group_num_entry = Entry(self, textvariable=self.num_of_groups_strvar, state=DISABLED)
+        self.group_num_entry.grid(row=1, column=4)
 
         self.num_of_groups = 0  # in case the reset button is clicke but this is not initialized
 
@@ -91,7 +91,7 @@ class Root(Tk):
         self.enter_button.config(state=DISABLED)
         self.button.config(state=DISABLED)  # Disable file browser button
         self.submitButton.config(state=NORMAL)
-        self.entry_lane.config(state=NORMAL)
+        self.group_num_entry.config(state=NORMAL)
         print(self.filename_strvar.get())  # debug Input UrL
         self.get_pic()
 
@@ -375,7 +375,7 @@ class Root(Tk):
             print("", end="")
 
         self.submitButton.config(state=DISABLED)
-        # self.entry_lane.config(state = NORMAL)
+        # self.group_num_entry.config(state = NORMAL)
         self.num_of_groups_strvar.set('')
         self.num_of_groups = 0
 
@@ -496,14 +496,14 @@ class Root(Tk):
 
     def submitButtonClick(self):
         """ handle button click event and output text from entry area"""
-        input = self.entry_lane.get()
+        input = self.group_num_entry.get()
         # print(input)
         self.create_entries_to_hold_lines(int(input))
         self.cur_line = 0
         self.submitButton.config(state=DISABLED)
         self.next_entries[0][0].config(state=NORMAL)  # enable first next button
         self.line_entries[0][0].config(state=NORMAL)  # enable first text entry
-        self.entry_lane.config(state=DISABLED)
+        self.group_num_entry.config(state=DISABLED)
         # self.imageCanvas.bind('<1>')
 
 
@@ -572,7 +572,7 @@ class Root(Tk):
         cv2.destroyAllWindows()
 
         self.reset_button.config(state=NORMAL)
-        self.entry_lane.config(state=NORMAL)
+        self.group_num_entry.config(state=NORMAL)
         self.submitButton.config(state=NORMAL)
 
 
