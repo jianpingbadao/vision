@@ -3,7 +3,6 @@ import time
 
 
 class Car:
-    tracks = []
 
     def __init__(self, i, xi, yi, max_age):
         self.i = i
