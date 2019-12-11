@@ -310,12 +310,11 @@ class Root(Tk):
         self.file_browser_button.focus()
 
 
-    def create_entries_to_hold_lines(self, num_lanes):
+    def create_entries_to_hold_lines(self, num_of_groups):
         """
         Create entries to hold information about the lines that we will click/enter later.
         """
-        self.num_of_groups = num_lanes
-        self.prev_lanes = 0
+        self.num_of_groups = num_of_groups
         self.num_of_lines_per_group = 3
         self.num_of_clicks_per_line = 2
         self.entry_strvars = [[StringVar() for _ in range(self.num_of_lines_per_group)] for _ in
@@ -358,14 +357,9 @@ class Root(Tk):
             self.next_buttons.append(next_buttons_cur_group)
             self.line_entries.append(line_entries_cur_group)
 
-        if self.prev_lanes > self.num_of_groups:  # check to see if the new amount of lanes is less than the previous
-            for line_entry in self.grid_slaves():
-                if int(line_entry.grid_info()["row"]) > self.num_of_groups:
-                    line_entry.grid_forget()
         self.cur_group = 0
         self.cur_line = 0
         self.cur_click = 0
-        self.prev_lanes = num_lanes
 
 
     def end(self):
