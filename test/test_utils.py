@@ -2,6 +2,10 @@ import sys
 
 sys.path.append('.')
 
+def test_point_tuple():
+    from utils import Point
+    point = Point(1, 2)
+    assert point.as_tuple() == (1, 2)
 
 def test_line_length():
     from utils import Line
