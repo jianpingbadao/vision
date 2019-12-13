@@ -188,7 +188,7 @@ def video_process(video_file: str, result_file: str, lines: List) -> None:
                     frame = cv2.polylines(frame, [_line], False, (255, 255, 255), 1)
 
                 count_str = hexagon.direction + ": " + str(all_counts[idx])
-                cv2.putText(frame, count_str, (10, start_y + delta_y), font, 0.5, (255, 0, 0), 2, cv2.LINE_AA)
+                cv2.putText(frame, count_str, (10, start_y + delta_y * idx), font, 0.5, (255, 0, 0), 2, cv2.LINE_AA)
 
             cv2.imshow('Vehicle Counting In Progress (Press q to quit)', frame)
 
