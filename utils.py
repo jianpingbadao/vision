@@ -16,6 +16,9 @@ class Point:
     def as_tuple(self) -> tuple:
         return (self.x, self.y)
 
+    def __str__(self):
+        return str(self.as_tuple())
+
 
 class Line:
     def __init__(self, xy):
@@ -40,6 +43,8 @@ class Line:
     def as_list_of_points(self):
         return [self.point1.as_array(), self.point2.as_array()]
 
+    def __str__(self):
+        return ",".join([str(self.point1), str(self.point2)])
 
     def intersection(self, target) -> bool:
         # TODO:
@@ -129,6 +134,7 @@ class Hexagon:
         self.trapezoid1 = Trapezoid(lines[:2])
         self.trapezoid2 = Trapezoid(lines[1:])
         self.direction = direction
+        self.lines = [Line(line) for line in lines]
 
     def inside(self, target: Point) -> bool:
         """Check if a given point is inside the Hexagon.
@@ -144,3 +150,6 @@ class Hexagon:
             True if the target point is inside the Hexagon; False, otherwise.
         """
         return self.trapezoid1.inside(target) or self.trapezoid2.inside(target)
+
+    def __str__(self):
+        return "\n".join([str(line) for line in self.lines])
