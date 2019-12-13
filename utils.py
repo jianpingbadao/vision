@@ -100,8 +100,6 @@ class Trapezoid:
         top_left_triangle = Triangle(self.line_up.point1, self.line_up.point2, self.line_down.point1)
         bottom_right_triangle = Triangle(self.line_down.point1, self.line_down.point2, self.line_up.point2)
         self._area = top_left_triangle.get_area() + bottom_right_triangle.get_area()
-        print(top_left_triangle.get_area())
-        print(bottom_right_triangle.get_area())
         return self._area
 
     def inside(self, target: Point, error=0.1) -> bool:
