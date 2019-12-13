@@ -393,11 +393,18 @@ class Root(Tk):
                 self.cur_group %= self.num_of_groups
 
     def submit_button_click(self, event=None):
-        """ handle button click event and output text from entry area"""
-        input = self.group_num_entry.get()
-        if not input:
+        """handle button click event and output text from entry area"""
+        input_group_number = self.group_num_entry.get()
+        if not input_group_number:
             return
-        self.create_entries_to_hold_lines(int(input))
+
+        try:
+            input_group_number = int(input_group_number.strip())
+        except:
+            self.num_of_groups_strvar.set('')
+            return
+
+        self.create_entries_to_hold_lines(input_group_number)
         self.cur_line = 0
         self.submit_button.config(state=DISABLED)
         self.next_buttons[0][0].config(state=NORMAL)  # enable first next button
