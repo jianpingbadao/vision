@@ -50,7 +50,7 @@ def video_process(video_file: str, result_file: str, lines: List) -> None:
     width = cap.get(3)
     height = cap.get(4)
     frame_area = height * width
-    area_threshold = frame_area / 450  # the area threshold (minimum) for each single vehicle in the video;
+    area_threshold = frame_area / 800  # the area threshold (minimum) for each single vehicle in the video;
     # TODO: should be adjustable for different camera
     # one option is to get the width of the lane
     # then use that as the baseline
