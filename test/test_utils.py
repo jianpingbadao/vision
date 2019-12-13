@@ -49,3 +49,23 @@ def test_trapezoid_outside():
     for target in targets:
         res.append(trapez.inside(target))
     assert res == [False] * len(res)
+
+def test_trapezoid_inside_2():
+    from utils import Trapezoid, Point
+    lines = [[0, 0, 2, 0], [1, 1, 2, 1]]
+    trapez = Trapezoid(lines)
+    targets = [Point(0.5, 0.5)]
+    res = []
+    for target in targets:
+        res.append(trapez.inside(target))
+    assert all(res) == True
+
+def test_hexagon_inside():
+    from utils import Hexagon, Point
+    lines = [[194, 178, 372, 177], [115, 243, 401, 243], [66, 332, 477, 326]]
+    hexagon = Hexagon(lines)
+    targets = [Point(309, 325)]
+    res = []
+    for target in targets:
+        res.append(hexagon.inside(target))
+    assert all(res) == True
