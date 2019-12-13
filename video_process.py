@@ -71,3 +71,138 @@ def video_process(video_file: str, result_file: str, lines: List) -> None:
         hexagons.append(hexagon)
     all_counts = [0] * len(lines)
     all_cars = [[] for _ in range(len(lines))]  # the Car in each hexagon
+
+    # Background Subtractor (contains binary image of moving objects)
+    background_subtractor = cv2.createBackgroundSubtractorMOG2(detectShadows=True)
+
+    # Kernals
+    kernalOp = np.ones((3, 3))
+    kernalCl = np.ones((11, 11))
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    max_car_age = 6
+    car_id = 1
+
+    while cap.isOpened():
+        read_success, frame = cap.read()
+        last_frame_time = time.time()
+
+        for cars in all_cars:
+            for car in cars:
+                car.age_one()
+
+        all_cars = [[car for car in cars if not car.timedOut()] for cars in all_cars]
+
+        masked_frame = background_subtractor.apply(frame)
+
+        if read_success == True:
+
+            # Binarization
+            _, imBin = cv2.threshold(masked_frame, 200, 255, cv2.THRESH_BINARY)
+
+            # Opening i.e First Erode the dilate
+            mask = cv2.morphologyEx(imBin, cv2.MORPH_OPEN, kernalOp)
+
+            # Closing i.e First Dilate then Erode
+            mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernalCl)
+
+            # Find Contours
+            # Creates rectangles around each vehicle
+            countours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+            for countour in countours:
+                countour_area = cv2.contourArea(countour)
+                # print(f"Detected area size: {countour_area}")
+                if countour_area > area_threshold:
+                    ####Tracking######
+                    m = cv2.moments(countour)
+                    if m['m00'] == 0:
+                        # normally this should not happen since the area is already larger than threshold.
+                        # Just in case of a bad threshold
+                        continue
+                    cx = int(m['m10'] / m['m00'])  # Centroid, https://www.learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/
+                    cy = int(m['m01'] / m['m00'])
+                    x, y, w, h = cv2.boundingRect(countour)
+
+                    existing_car = False
+                    car_area_id = -1
+                    in_interested_area = False
+                    centroid_point = Point(cx, cy)
+                    for idx, hexagon in enumerate(hexagons):
+                        if not hexagon.inside(centroid_point):
+                            continue
+
+                        in_interested_area = True
+                        for car in all_cars[idx]:
+                            # the countour has match with an existing/previous car
+                            # TODO: this may not hold for all cases
+                            # e.g. if the frame rate is too low,
+                            # then the same car in consecutive frames will be far away from each other
+                            if abs(cx - car.getX()) <= w and abs(cy - car.getY()) <= h:
+                                existing_car = True
+                                car.updateCoords(cx, cy)
+
+                                mid_line = (hexagon.lines[1].point1.y + hexagon.lines[1].point2.y) / 2
+
+                                count_it = False
+                                if hexagon.direction == 'up' and car.going_UP(mid_line):
+                                    count_it = True
+                                elif hexagon.direction == 'down' and car.going_DOWN(mid_line):
+                                    count_it = True
+
+                                if count_it:
+                                    all_counts[idx] += 1
+
+                                break
+
+                        car_area_id = idx
+                        # always break here, since one point can only be in one area
+                        break
+
+                    if in_interested_area:
+                        if not existing_car:
+                            new_car = vehicles.Car(car_id, cx, cy, max_car_age)
+                            all_cars[car_area_id].append(new_car)
+                            car_id += 1
+
+                        cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                    else:
+                        cv2.circle(frame, (cx, cy), 5, (0, 255, 255), -1)
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 255), 2)
+                else:
+                    # countours with smaller area
+                    pass
+            ## The end of processing countours in current frame
+
+            for cars in all_cars:
+                for car in cars:
+                    cv2.putText(frame, str(car.getId()), (car.getX(), car.getY()),
+                            font, 0.3, car.getRGB(), 1, cv2.LINE_AA)
+
+            start_y = 40
+            delta_y = 50
+            for idx, hexagon in enumerate(hexagons):
+                for line in hexagon.lines:
+                    _line = np.array(line.as_list_of_points(), dtype=np.int32).reshape((-1, 1, 2))
+                    # pdb.set_trace()
+                    frame = cv2.polylines(frame, [_line], False, (255, 255, 255), 1)
+
+                count_str = hexagon.direction + ": " + str(all_counts[idx])
+                cv2.putText(frame, count_str, (10, start_y + delta_y), font, 0.5, (255, 0, 0), 2, cv2.LINE_AA)
+
+            cv2.imshow('Vehicle Counting In Progress (Press q to quit)', frame)
+
+            if cv2.waitKey(1) & 0xff == ord('q'):
+                break
+
+            cur_time = time.time()
+            while cur_time - last_frame_time < 1 / fps:
+                time.sleep(0.001)
+                cur_time = time.time()
+        else:
+            # video open failed
+            # print(f"ERROR: cannot open video {video_file}")
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
