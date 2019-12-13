@@ -104,7 +104,7 @@ class Trapezoid:
         print(bottom_right_triangle.get_area())
         return self._area
 
-    def inside(self, target: Point) -> bool:
+    def inside(self, target: Point, error=0.1) -> bool:
         """Check if a given point is inside the trapezoid or not
 
         Parameters
@@ -126,7 +126,7 @@ class Trapezoid:
         right_area = Triangle(self.line_up.point2, self.line_down.point2, target).get_area()
         bottom_area = Triangle(self.line_down.point2, self.line_down.point1, target).get_area()
         left_area = Triangle(self.line_down.point1, self.line_up.point1, target).get_area()
-        return sum([top_area, right_area, bottom_area, left_area]) == self.get_area()
+        return abs(sum([top_area, right_area, bottom_area, left_area]) - self.get_area()) <= error
 
 
 class Hexagon:
