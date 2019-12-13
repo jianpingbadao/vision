@@ -17,6 +17,7 @@ from PIL import Image, ImageTk
 from selenium import webdriver
 
 from main import execute
+from video_process import video_process
 
 desktop_path = os.path.expanduser("~/Desktop/")
 chromedriver_path = os.path.join(desktop_path, "chromedriver")
@@ -264,7 +265,10 @@ class Root(Tk):
             direction_and_lines.append({"direction": self.direction_vars[group].get(), "lines": lines})
 
         # TODO: add an entry to enter the output file name
-        execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
+        # execute(os.getcwd(), self.filename, "result.txt", 0, direction_and_lines)
+        # video_file = os.path.join(os.getcwd(), self.filename)
+        result_file = os.path.join(os.getcwd(), "result.txt")
+        video_process(self.filename, result_file, direction_and_lines)
 
     def reset(self):
         """ Reset will reset all the values on the screen.
