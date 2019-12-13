@@ -55,6 +55,8 @@ def video_process(video_file: str, result_file: str, lines: List) -> None:
     # one option is to get the width of the lane
     # then use that as the baseline
 
+    fast_play = 1.0  # TODO: adjust the process speed
+
     # construct Hexagon area using the passed/picked up lines
     hexagons = []
     for direction_and_line in lines:
@@ -196,7 +198,7 @@ def video_process(video_file: str, result_file: str, lines: List) -> None:
                 break
 
             cur_time = time.time()
-            while cur_time - last_frame_time < 1 / fps:
+            while cur_time - last_frame_time < fast_play / fps:
                 time.sleep(0.001)
                 cur_time = time.time()
         else:
