@@ -6,6 +6,17 @@ import os
 
 debug = True
 
+#variables to create color histograms
+h_bins = 50
+s_bins = 60
+histSize = [h_bins, s_bins]
+
+h_ranges = [0, 180]
+s_ranges = [0, 256]
+ranges = h_ranges + s_ranges
+
+channels = [0, 1]
+
 def execute(directory, file_n, result_n, up_dwn, lines=None):
     """ 
         purpose: it counts cars going up
@@ -51,6 +62,9 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
     # cnt_down is how many cars are going down relative to the highway
     cnt_up = 0
     cnt_down = 0
+
+    #store contours
+    contour_image = []
 
     cap = cv2.VideoCapture(file_name)
 
@@ -246,6 +260,7 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
 
                     cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)
                     img = cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                    contour_image.append(createHistogram(img))
 
             for i in cars:
                 cv2.putText(frame, str(i.getId()), (i.getX(), i.getY()), font, 0.3, i.getRGB(), 1, cv2.LINE_AA)
@@ -306,3 +321,12 @@ def execute(directory, file_n, result_n, up_dwn, lines=None):
     cv2.destroyAllWindows()
 
     return cnt_up, cnt_down
+
+#make sure img is imread, create color histogram
+def createHistogram(img):
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    hist_test1 = cv2.calcHist([hsv], channels, None, histSize, ranges, accumulate=False)
+    cv2.normalize(hist_test1, hist_test1, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
+    
+def compareHist(hist1, hist2):
+    cv2.compareHist(hist1, hist2, 0)

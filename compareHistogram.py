@@ -3,8 +3,10 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #can also use "Car1.png" or "Car3.png"
-img1 = cv2.imread("whitecar1.png")
+img1 = cv2.imread("Car1.png")
 img2 = cv2.imread("whitecar2.png")
+#cv2.imshow("Car 1", img1)
+#cv2.imshow("Car 2", img2)
 
 hsv_test1 = cv2.cvtColor(img1, cv2.COLOR_BGR2HSV)
 hsv_test2 = cv2.cvtColor(img2, cv2.COLOR_BGR2HSV)
