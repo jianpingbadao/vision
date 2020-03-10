@@ -5,8 +5,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 #can also use "Car1.png" or "Car3.png"
-img1 = cv2.imread("Car1.png")
-img2 = cv2.imread("Car3.png")
+img1 = cv2.imread("whitecar1.png")
+img2 = cv2.imread("whitecar2.png")
 b1, g1, r1 = cv2.split(img1)
 b2, g2, r2 = cv2.split(img2)
 cv2.imshow("img1", img1)
